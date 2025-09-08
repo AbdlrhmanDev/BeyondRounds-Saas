@@ -4,69 +4,85 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Check, Heart, Zap, Crown, Users } from "lucide-react"
+import { Check, Heart, Zap, Crown, Users, ChevronDown } from "lucide-react"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
+import ModernNav from "@/components/modern-nav"
 
 const plans = [
   {
-    id: "trial",
-    name: "7-Day Trial",
-    price: "£9.99",
-    period: "one-time",
-    description: "Perfect for trying out BeyondRounds",
+    id: "onetime",
+    name: "One-time",
+    price: "€14.99",
+    period: "",
+    description: "Perfect for a single, curated connection",
     features: [
-      "7 days of full access",
-      "Up to 2 match groups",
-      "AI-facilitated group chats",
-      "Profile verification",
-      "30-day friendship guarantee",
+      "One Curated Match",
+      "Private Group Chat Access",
+      "Meetup Facilitation",
+      "Doctor-Verified Community",
     ],
     popular: false,
-    stripePriceId: "price_trial_7day", // Replace with actual Stripe price ID
-    icon: Zap,
-    color: "text-blue-600",
+    stripePriceId: "price_onetime",
+    buttonText: "Start Trial",
+    buttonStyle: "white",
   },
   {
     id: "monthly",
     name: "Monthly",
-    price: "£29.99",
-    period: "per month",
-    description: "Great for regular networking",
+    price: "€29.99",
+    period: "",
+    description: "Full access with ultimate flexibility",
     features: [
-      "Unlimited weekly matches",
-      "AI-facilitated group chats",
-      "Priority matching algorithm",
-      "Profile verification",
-      "30-day friendship guarantee",
-      "Cancel anytime",
-    ],
-    popular: true,
-    stripePriceId: "price_monthly_subscription", // Replace with actual Stripe price ID
-    icon: Users,
-    color: "text-green-600",
-  },
-  {
-    id: "annual",
-    name: "Annual",
-    price: "£299.99",
-    period: "per year",
-    originalPrice: "£359.88",
-    description: "Best value for committed networkers",
-    features: [
-      "Unlimited weekly matches",
-      "AI-facilitated group chats",
-      "Priority matching algorithm",
-      "Profile verification",
-      "30-day friendship guarantee",
-      "2 months free",
-      "Early access to new features",
+      "Weekly Curated Matches",
+      "Unlimited Private Group Chats",
+      "Advanced Meetup Facilitation",
+      "Priority Matching",
+      "Risk-Free Guarantee",
     ],
     popular: false,
-    stripePriceId: "price_annual_subscription", // Replace with actual Stripe price ID
-    icon: Crown,
-    color: "text-purple-600",
+    stripePriceId: "price_monthly_subscription",
+    buttonText: "Get Started",
+    buttonStyle: "gradient",
+  },
+  {
+    id: "quarterly",
+    name: "3-month",
+    price: "€19.99",
+    period: "per month",
+    description: "Best value for consistent connection",
+    features: [
+      "Weekly Curated Matches",
+      "Unlimited Private Group Chats",
+      "Advanced Meetup Facilitation",
+      "Priority Matching",
+      "Risk-Free Guarantee",
+      "Save 33%",
+    ],
+    popular: true,
+    stripePriceId: "price_quarterly_subscription",
+    buttonText: "Choose Plan",
+    buttonStyle: "gradient",
+  },
+  {
+    id: "semiannual",
+    name: "6-month",
+    price: "€14.99",
+    period: "per month",
+    description: "Maximum savings for committed social growth",
+    features: [
+      "Weekly Curated Matches",
+      "Unlimited Private Group Chats",
+      "Advanced Meetup Facilitation",
+      "Priority Matching",
+      "Risk-Free Guarantee",
+      "Save 50%",
+    ],
+    popular: false,
+    stripePriceId: "price_semiannual_subscription",
+    buttonText: "Save Most",
+    buttonStyle: "white",
   },
 ]
 
@@ -88,7 +104,7 @@ export default function PricingPage() {
     checkUser()
   }, [supabase.auth])
 
-  const handleSubscribe = async (plan: (typeof plans)[0]) => {
+  const handleSubscribe = async (plan: any) => {
     if (!user) {
       router.push("/auth/login")
       return
@@ -127,160 +143,166 @@ export default function PricingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
-      {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <Heart className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold text-gray-900">BeyondRounds</span>
-          </Link>
-          <div className="flex items-center gap-4">
-            {user ? (
-              <Link href="/dashboard">
-                <Button variant="ghost">Dashboard</Button>
-              </Link>
-            ) : (
-              <Link href="/auth/login">
-                <Button variant="ghost">Sign In</Button>
-              </Link>
-            )}
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Animated Gradient Background */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-600/20 via-blue-600/20 to-cyan-500/20 animate-gradient-shift"></div>
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-tl from-purple-500/10 via-transparent to-blue-500/10 animate-pulse-slow"></div>
+        {/* Decorative gradient orbs */}
+        <div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-violet-400/30 to-purple-600/30 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-blue-400/30 to-cyan-500/30 rounded-full blur-3xl animate-float-delayed"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-indigo-400/20 to-purple-500/20 rounded-full blur-3xl animate-spin-slow"></div>
+      </div>
+
+      {/* Glass morphism overlay */}
+      <div className="min-h-screen bg-white/5 backdrop-blur-[1px] supports-backdrop-blur:bg-white/5 supports-no-backdrop-blur:bg-white/90">
+        <ModernNav />
+
+        {/* Hero Section */}
+        <section className="py-16 px-4">
+          <div className="container mx-auto text-center max-w-4xl">
+            <h1 className="text-4xl lg:text-5xl font-bold mb-6 text-balance">
+              <span className="bg-gradient-to-r from-violet-600 via-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                Unlock Your Social Circle: Choose Your BeyondRounds Plan
+              </span>
+            </h1>
+            <p className="text-xl lg:text-2xl text-gray-600 mb-12 text-pretty max-w-3xl mx-auto leading-relaxed">
+              Choose the plan that works best for your schedule.
+            </p>
           </div>
-        </div>
-      </header>
+        </section>
 
-      {/* Hero Section */}
-      <section className="py-16 px-4">
-        <div className="container mx-auto text-center max-w-4xl">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Choose Your Plan</h1>
-          <p className="text-xl text-gray-600 mb-8">
-            Start connecting with fellow doctors today. All plans include our 30-day friendship guarantee.
-          </p>
-        </div>
-      </section>
-
-      {/* Pricing Cards */}
-      <section className="pb-16 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-3 gap-8">
-            {plans.map((plan) => {
-              const Icon = plan.icon
-              return (
+        {/* Pricing Cards */}
+        <section className="pb-24 px-4 bg-gray-50">
+          <div className="container mx-auto max-w-6xl py-12">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {plans.map((plan) => (
                 <Card
                   key={plan.id}
-                  className={`relative ${
-                    plan.popular ? "border-2 border-blue-500 shadow-xl scale-105" : "border shadow-lg"
+                  className={`relative transition-all duration-300 hover:-translate-y-2 h-full flex flex-col ${
+                    plan.popular 
+                      ? "border-2 border-purple-200 shadow-lg bg-purple-50/50" 
+                      : "border border-gray-200 bg-white"
                   }`}
                 >
                   {plan.popular && (
-                    <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-500">
-                      Most Popular
-                    </Badge>
-                  )}
-
-                  <CardHeader className="text-center pb-4">
-                    <div
-                      className={`w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4 ${
-                        plan.popular ? "bg-blue-100" : "bg-gray-100"
-                      }`}
-                    >
-                      <Icon className={`w-6 h-6 ${plan.color}`} />
+                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                      <Badge className="bg-gradient-to-r from-purple-600 to-green-600 text-white px-4 py-1 rounded-full text-sm font-semibold shadow-lg">
+                        Most Popular
+                      </Badge>
                     </div>
-                    <CardTitle className="text-2xl">{plan.name}</CardTitle>
-                    <CardDescription className="text-sm">{plan.description}</CardDescription>
-
+                  )}
+                  
+                  <CardHeader className="text-center pb-4">
+                    <CardTitle className="text-xl font-bold text-gray-900 mb-2">{plan.name}</CardTitle>
+                    <CardDescription className="text-gray-600 text-sm mb-4">{plan.description}</CardDescription>
+                    
                     <div className="pt-4">
-                      <div className="flex items-baseline justify-center gap-2">
-                        <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
-                        <span className="text-gray-600">/{plan.period}</span>
+                      <div className="flex items-baseline justify-center gap-1">
+                        <span className="text-3xl font-bold text-purple-600">{plan.price}</span>
+                        {plan.period && <span className="text-gray-600 text-sm">{plan.period}</span>}
                       </div>
-                      {plan.originalPrice && (
-                        <p className="text-sm text-gray-500 line-through mt-1">{plan.originalPrice}</p>
-                      )}
                     </div>
                   </CardHeader>
 
-                  <CardContent className="space-y-6">
-                    <ul className="space-y-3">
-                      {plan.features.map((feature, index) => (
-                        <li key={index} className="flex items-start gap-3">
-                          <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                          <span className="text-sm text-gray-700">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
+                  <CardContent className="flex flex-col h-full">
+                    <div className="flex-grow">
+                      <ul className="space-y-3 mb-6">
+                        {plan.features.map((feature, index) => (
+                          <li key={index} className="flex items-start gap-3">
+                            <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                              feature.includes("Risk-Free") || feature.includes("Save")
+                                ? "bg-gradient-to-r from-green-500 to-emerald-500"
+                                : "bg-gradient-to-r from-purple-500 to-purple-600"
+                            }`}>
+                              <Check className="w-3 h-3 text-white" />
+                            </div>
+                            <span className="text-sm text-gray-700 leading-relaxed">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
 
-                    <Button
-                      onClick={() => handleSubscribe(plan)}
-                      disabled={processingPlan === plan.id || isLoading}
-                      className={`w-full ${plan.popular ? "bg-blue-600 hover:bg-blue-700" : ""}`}
-                      variant={plan.popular ? "default" : "outline"}
-                    >
-                      {processingPlan === plan.id ? "Processing..." : user ? `Get ${plan.name}` : "Sign Up & Subscribe"}
-                    </Button>
+                    <div className="mt-auto">
+                      <Button
+                        onClick={() => handleSubscribe(plan)}
+                        disabled={processingPlan === plan.id || isLoading}
+                        className={`w-full transition-all duration-300 ${
+                          plan.buttonStyle === "gradient"
+                            ? "bg-gradient-to-r from-purple-600 to-green-600 hover:from-purple-700 hover:to-green-700 text-white"
+                            : "bg-white border-2 border-purple-600 text-purple-600 hover:bg-purple-50"
+                        }`}
+                      >
+                        {processingPlan === plan.id ? (
+                          <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                            Processing...
+                          </div>
+                        ) : (
+                          user ? plan.buttonText : "Sign Up & Subscribe"
+                        )}
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="py-16 px-4 bg-white">
-        <div className="container mx-auto max-w-4xl">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Frequently Asked Questions</h2>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-2">What's included in the trial?</h3>
-              <p className="text-gray-600 text-sm">
-                The 7-day trial gives you full access to all features including weekly matches, group chats, and our AI
-                facilitator. Perfect for testing the waters.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-2">Can I cancel anytime?</h3>
-              <p className="text-gray-600 text-sm">
-                Yes! Monthly and annual subscriptions can be cancelled at any time. You'll continue to have access until
-                the end of your billing period.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-2">What's the 30-day guarantee?</h3>
-              <p className="text-gray-600 text-sm">
-                If you don't make meaningful connections within 30 days, we'll refund your subscription. No questions
-                asked.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-2">How does matching work?</h3>
-              <p className="text-gray-600 text-sm">
-                Our AI algorithm matches you with 2-3 doctors every Thursday based on specialty, interests, location,
-                and availability preferences.
-              </p>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8 px-4">
-        <div className="container mx-auto max-w-6xl text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <Heart className="w-5 h-5 text-white" />
+        {/* FAQ Section */}
+        <section className="py-24 px-4 relative">
+          <div className="container mx-auto max-w-4xl">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6">
+                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  Frequently Asked Questions
+                </span>
+              </h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                Everything you need to know about our plans and services.
+              </p>
             </div>
-            <span className="text-xl font-bold">BeyondRounds</span>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="glass-card p-6 animate-slide-up" style={{ animationDelay: "0.1s" }}>
+                <h3 className="font-bold text-gray-900 mb-3 text-lg">What's included in the trial?</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  The 7-day trial gives you full access to all features including weekly matches, group chats, and our AI
+                  facilitator. Perfect for testing the waters.
+                </p>
+              </div>
+
+              <div className="glass-card p-6 animate-slide-up" style={{ animationDelay: "0.2s" }}>
+                <h3 className="font-bold text-gray-900 mb-3 text-lg">Can I cancel anytime?</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Yes! Monthly and annual subscriptions can be cancelled at any time. You'll continue to have access until
+                  the end of your billing period.
+                </p>
+              </div>
+
+              <div className="glass-card p-6 animate-slide-up" style={{ animationDelay: "0.3s" }}>
+                <h3 className="font-bold text-gray-900 mb-3 text-lg">What's the 30-day guarantee?</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  If you don't make meaningful connections within 30 days, we'll refund your subscription. No questions
+                  asked.
+                </p>
+              </div>
+
+              <div className="glass-card p-6 animate-slide-up" style={{ animationDelay: "0.4s" }}>
+                <h3 className="font-bold text-gray-900 mb-3 text-lg">How does matching work?</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Our AI algorithm matches you with 2-3 doctors every Thursday based on specialty, interests, location,
+                  and availability preferences.
+                </p>
+              </div>
+            </div>
           </div>
-          <p className="text-gray-400">Where doctors become friends.</p>
-        </div>
-      </footer>
+        </section>
+
+        {/* Enhanced Footer */}
+    
+      </div>
     </div>
   )
 }

@@ -3,46 +3,58 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Heart, Users, Shield, Target, Award, Stethoscope } from "lucide-react"
 import Link from "next/link"
+import ModernNav from "@/components/modern-nav"
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
-      {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <Heart className="w-5 h-5 text-white" />
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Animated Gradient Background */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-600/20 via-blue-600/20 to-cyan-500/20 animate-gradient-shift"></div>
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-tl from-purple-500/10 via-transparent to-blue-500/10 animate-pulse-slow"></div>
+        {/* Decorative gradient orbs */}
+        <div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-violet-400/30 to-purple-600/30 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-blue-400/30 to-cyan-500/30 rounded-full blur-3xl animate-float-delayed"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-indigo-400/20 to-purple-500/20 rounded-full blur-3xl animate-spin-slow"></div>
+      </div>
+
+      {/* Glass morphism overlay */}
+      <div className="min-h-screen bg-white/5 backdrop-blur-[1px] supports-backdrop-blur:bg-white/5 supports-no-backdrop-blur:bg-white/90">
+        <ModernNav />
+
+        {/* Hero Section */}
+        <section className="py-24 px-4">
+          <div className="container mx-auto text-center max-w-4xl">
+            <div className="inline-flex items-center gap-2 px-4 py-2 mb-8 bg-white/10 backdrop-blur-lg rounded-full border border-white/20 shadow-lg shadow-violet-500/10">
+              <div className="w-2 h-2 bg-gradient-to-r from-violet-400 to-blue-500 rounded-full animate-pulse"></div>
+              <span className="text-sm font-medium bg-gradient-to-r from-violet-600 to-blue-600 bg-clip-text text-transparent">
+                Our Story
+              </span>
             </div>
-            <span className="text-xl font-bold text-gray-900">BeyondRounds</span>
-          </Link>
-          <div className="flex items-center gap-4">
-            <Link href="/auth/login">
-              <Button variant="ghost">Sign In</Button>
-            </Link>
-            <Link href="/join">
-              <Button>Join Now</Button>
-            </Link>
+            
+            <h1 className="text-5xl lg:text-6xl font-bold mb-6 text-balance leading-tight">
+              <span className="bg-gradient-to-r from-violet-600 via-blue-600 to-cyan-500 bg-clip-text text-transparent animate-gradient-text">
+                Connecting Medical
+              </span>
+              <br />
+              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-violet-600 bg-clip-text text-transparent">
+                Professionals Beyond
+              </span>
+              <br />
+              <span className="bg-gradient-to-r from-purple-600 via-violet-600 to-blue-600 bg-clip-text text-transparent">
+                Hospital Walls
+              </span>
+            </h1>
+            <p className="text-xl lg:text-2xl text-gray-600 mb-12 text-pretty max-w-3xl mx-auto leading-relaxed">
+              BeyondRounds was founded by doctors who understood the isolation that comes with medical practice. We
+              believe that 
+              <span className="bg-gradient-to-r from-violet-600 to-blue-600 bg-clip-text text-transparent font-semibold"> meaningful professional relationships</span> lead to better patient care and personal fulfillment.
+            </p>
           </div>
-        </div>
-      </header>
+        </section>
 
-      {/* Hero Section */}
-      <section className="py-16 px-4">
-        <div className="container mx-auto text-center max-w-4xl">
-          <Badge className="mb-6 bg-blue-100 text-blue-700 hover:bg-blue-100">Our Story</Badge>
-          <h1 className="text-4xl font-bold text-gray-900 mb-6 text-balance">
-            Connecting Medical Professionals Beyond Hospital Walls
-          </h1>
-          <p className="text-xl text-gray-600 mb-8 text-pretty max-w-3xl mx-auto">
-            BeyondRounds was founded by doctors who understood the isolation that comes with medical practice. We
-            believe that meaningful professional relationships lead to better patient care and personal fulfillment.
-          </p>
-        </div>
-      </section>
-
-      {/* Mission Section */}
-      <section className="py-16 px-4 bg-white">
+        {/* Mission Section */}
+        <section className="py-24 px-4 relative">
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="text-center border-0 shadow-lg">
@@ -196,18 +208,41 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8 px-4">
-        <div className="container mx-auto max-w-6xl text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <Heart className="w-5 h-5 text-white" />
+        {/* Enhanced Footer */}
+        <footer className="relative py-20 px-4">
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-gray-800/30 to-transparent"></div>
+          <div className="container mx-auto max-w-6xl relative z-10">
+            <div className="bg-white/15 backdrop-blur-2xl border border-white/20 rounded-3xl p-12 shadow-2xl">
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-4 mb-8">
+                  <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/25 animate-glow">
+                    <Heart className="w-7 h-7 text-white" />
+                  </div>
+                  <span className="text-2xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent">BeyondRounds</span>
+                </div>
+                <p className="text-gray-600 leading-relaxed mb-8 text-lg">Where doctors become lifelong friends.</p>
+                <div className="flex justify-center gap-4 mb-8">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500/20 to-blue-600/20 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-gradient-to-br hover:from-blue-500/30 hover:to-blue-600/30 transition-all duration-300 cursor-pointer hover:scale-110 shadow-lg">
+                    <span className="text-blue-600 text-lg font-bold">𝕏</span>
+                  </div>
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500/20 to-blue-600/20 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-gradient-to-br hover:from-blue-500/30 hover:to-blue-600/30 transition-all duration-300 cursor-pointer hover:scale-110 shadow-lg">
+                    <span className="text-blue-600 text-lg font-bold">in</span>
+                  </div>
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500/20 to-blue-600/20 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-gradient-to-br hover:from-blue-500/30 hover:to-blue-600/30 transition-all duration-300 cursor-pointer hover:scale-110 shadow-lg">
+                    <span className="text-blue-600 text-lg font-bold">f</span>
+                  </div>
+                </div>
+                <div className="border-t border-white/20 pt-8">
+                  <p className="text-gray-600 text-lg font-medium">
+                    &copy; 2024 <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent font-bold">BeyondRounds</span>. All rights reserved.
+                  </p>
+                  <p className="text-gray-500 text-sm mt-2">Made with ❤️ for the medical community</p>
+                </div>
+              </div>
             </div>
-            <span className="text-xl font-bold">BeyondRounds</span>
           </div>
-          <p className="text-gray-400">Where doctors become friends.</p>
-        </div>
-      </footer>
+        </footer>
+      </div>
     </div>
   )
 }
