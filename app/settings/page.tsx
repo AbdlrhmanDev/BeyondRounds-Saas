@@ -31,6 +31,7 @@ import {
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
 type Gender = 'male' | 'female'
 
@@ -169,6 +170,7 @@ export default function SettingsPage() {
 
         if (profileError) {
           console.error("Error loading profile:", profileError)
+          toast.error("Failed to load profile data")
         } else {
           setCurrentProfile(profileData)
           // Pre-populate form with existing data
@@ -179,8 +181,8 @@ export default function SettingsPage() {
             city: profileData.city || '',
             gender: onlyMF(profileData.gender),
             genderPreference: onlyMF(profileData.gender_preference),
-            interests: profileData.interests || [],
-            availabilitySlots: profileData.availability_slots || [],
+            interests: Array.isArray(profileData.interests) ? profileData.interests : [],
+            availabilitySlots: Array.isArray(profileData.availability_slots) ? profileData.availability_slots : [],
             bio: profileData.bio || ''
           })
         }
@@ -188,6 +190,7 @@ export default function SettingsPage() {
         setIsLoading(false)
       } catch (error) {
         console.error("Error loading user data:", error)
+        toast.error("Failed to load user data")
         setIsLoading(false)
       }
     }
@@ -271,39 +274,80 @@ export default function SettingsPage() {
     setIsSaving(true)
     setError(null)
 
-    const g = String(profileData.gender).trim().toLowerCase()
-    const gp = String(profileData.genderPreference).trim().toLowerCase()
-
-    if (!allowed.includes(g as Gender) || !allowed.includes(gp as Gender)) {
+    // Validate required fields
+    if (!profileData.firstName.trim() || !profileData.lastName.trim()) {
       setIsSaving(false)
-      setError('Gender and Gender Preference must be either "male" or "female".')
+      setError('First name and last name are required.')
+      toast.error('First name and last name are required.')
+      return
+    }
+
+    if (!profileData.specialty.trim()) {
+      setIsSaving(false)
+      setError('Specialty is required.')
+      toast.error('Specialty is required.')
+      return
+    }
+
+    if (!profileData.city.trim()) {
+      setIsSaving(false)
+      setError('City is required.')
+      toast.error('City is required.')
+      return
+    }
+
+    // Validate gender fields only if they are provided
+    const g = profileData.gender ? String(profileData.gender).trim().toLowerCase() : null
+    const gp = profileData.genderPreference ? String(profileData.genderPreference).trim().toLowerCase() : null
+
+    if (g && !allowed.includes(g as Gender)) {
+      setIsSaving(false)
+      setError('Gender must be either "male" or "female".')
+      toast.error('Gender must be either "male" or "female".')
+      return
+    }
+
+    if (gp && !allowed.includes(gp as Gender)) {
+      setIsSaving(false)
+      setError('Gender preference must be either "male" or "female".')
+      toast.error('Gender preference must be either "male" or "female".')
       return
     }
 
     try {
+      const updateData: any = {
+        first_name: profileData.firstName.trim(),
+        last_name: profileData.lastName.trim(),
+        specialty: profileData.specialty.trim(),
+        city: profileData.city.trim(),
+        bio: profileData.bio.trim(),
+        updated_at: new Date().toISOString()
+      }
+
+      // Only include gender fields if they are provided
+      if (g) updateData.gender = g
+      if (gp) updateData.gender_preference = gp
+      
+      // Include arrays only if they have content
+      if (profileData.interests.length > 0) {
+        updateData.interests = profileData.interests
+      }
+      if (profileData.availabilitySlots.length > 0) {
+        updateData.availability_slots = profileData.availabilitySlots
+      }
+
       const { error: profileError } = await supabase
         .from('profiles')
-        .update({
-          first_name: profileData.firstName,
-          last_name: profileData.lastName,
-          specialty: profileData.specialty,
-          city: profileData.city,
-          gender: g,                       // متوافق مع CHECK
-          gender_preference: gp,           // متوافق مع CHECK
-          interests: profileData.interests,
-          availability_slots: profileData.availabilitySlots,
-          bio: profileData.bio,
-          updated_at: new Date().toISOString()
-        })
+        .update(updateData)
         .eq('id', user.id)
 
       if (profileError) throw profileError
 
-      // Here you would typically integrate with a payment processor
-      // For now, we'll just simulate payment processing
-      console.log("Payment data:", paymentData)
+      // Update current profile state
+      setCurrentProfile((prev: any) => ({ ...prev, ...updateData }))
       
       setSuccess(true)
+      toast.success('Profile updated successfully!')
       
       // Redirect to dashboard after success
       setTimeout(() => {
@@ -311,7 +355,10 @@ export default function SettingsPage() {
       }, 2000)
 
     } catch (e: any) {
-      setError(e.message || 'Failed to save profile')
+      console.error('Profile update error:', e)
+      const errorMessage = e.message || 'Failed to save profile'
+      setError(errorMessage)
+      toast.error(errorMessage)
     } finally {
       setIsSaving(false)
     }

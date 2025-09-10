@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Input } from "@/components/ui/input"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { 
   Heart, 
   Users, 
@@ -26,7 +27,13 @@ import {
   Zap,
   Award,
   Target,
-  BarChart3
+  BarChart3,
+  ChevronDown,
+  User,
+  Mail,
+  MapPin,
+  Stethoscope,
+  Edit
 } from "lucide-react"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
@@ -141,8 +148,46 @@ export default function DashboardPage() {
     loadDashboard()
   }, [router, supabase])
 
+  // Check if profile is complete
+  const isProfileComplete = (profile: UserProfile | null) => {
+    if (!profile) return false
+    return !!(
+      profile.first_name?.trim() &&
+      profile.last_name?.trim() &&
+      profile.specialty?.trim() &&
+      profile.city?.trim()
+    )
+  }
+
+  // Add profile completion notification
+  useEffect(() => {
+    if (profile && !isProfileComplete(profile)) {
+      const profileNotification = {
+        id: 999, // Use high ID to avoid conflicts
+        type: "profile" as const,
+        message: "Complete your profile to start receiving matches",
+        time: "Now",
+        unread: true
+      }
+      
+      setNotifications(prev => {
+        // Check if profile notification already exists
+        const hasProfileNotification = prev.some(n => n.id === 999)
+        if (!hasProfileNotification) {
+          return [profileNotification, ...prev]
+        }
+        return prev
+      })
+    } else if (profile && isProfileComplete(profile)) {
+      // Remove profile notification if profile is complete
+      setNotifications(prev => prev.filter(n => n.id !== 999))
+    }
+  }, [profile])
+
   const getInitials = (firstName: string, lastName: string) => {
-    return `${firstName[0]}${lastName[0]}`.toUpperCase()
+    const first = firstName && firstName.trim() ? firstName.trim()[0] : ''
+    const last = lastName && lastName.trim() ? lastName.trim()[0] : ''
+    return first || last ? `${first}${last}`.toUpperCase() : 'U'
   }
 
   const getLastMessage = (match: Match) => {
@@ -170,7 +215,7 @@ export default function DashboardPage() {
     match.match_members.some(member =>
       member.profiles.some(profile =>
         profile.specialty.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        `${profile.first_name} ${profile.last_name}`.toLowerCase().includes(searchTerm.toLowerCase())
+        `${profile.first_name || ''} ${profile.last_name || ''}`.toLowerCase().includes(searchTerm.toLowerCase())
       )
     )
   )
@@ -247,24 +292,49 @@ export default function DashboardPage() {
                 </Button>
               </div>
               
-              <Link href="/settings">
-                <Button variant="ghost" size="sm" className="hover:bg-white/50 hover:text-violet-600 transition-all duration-200">
-                  <Settings className="w-4 h-4 mr-2" />
-                  Settings
-                </Button>
-              </Link>
-              
-              <Button
-                variant="ghost"
-                size="sm"
-                className="hover:bg-white/50 hover:text-red-600 transition-all duration-200"
-                onClick={async () => {
-                  await supabase.auth.signOut()
-                  router.push("/")
-                }}
-              >
-                Sign Out
-              </Button>
+              {/* User Profile Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center gap-2 px-3 py-2 rounded-md bg-white border hover:bg-gray-50">
+                    <User className="w-4 h-4" />
+                    {profile ? `${profile.first_name}` : "User"}
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent 
+                  align="end" 
+                  className="w-64 bg-white border shadow-lg rounded-md p-1"
+                  sideOffset={5}
+                >
+                  <DropdownMenuItem 
+                    className="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 rounded cursor-pointer"
+                    onClick={() => router.push('/profile')}
+                  >
+                    <User className="w-4 h-4" />
+                    Profile Info
+                  </DropdownMenuItem>
+                  
+                  <DropdownMenuSeparator className="my-1" />
+                  
+                  <DropdownMenuItem 
+                    className="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 rounded cursor-pointer"
+                    onClick={() => router.push('/settings')}
+                  >
+                    <Settings className="w-4 h-4" />
+                    Settings
+                  </DropdownMenuItem>
+                  
+                  <DropdownMenuItem 
+                    className="flex items-center gap-2 px-3 py-2 hover:bg-red-50 text-red-600 rounded cursor-pointer"
+                    onClick={async () => {
+                      await supabase.auth.signOut()
+                      router.push("/")
+                    }}
+                  >
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
@@ -462,7 +532,7 @@ export default function DashboardPage() {
                               {match.match_members.slice(0, 5).map((member, index) => (
                                 <Avatar key={index} className="w-10 h-10 border-3 border-white shadow-lg">
                                   <AvatarFallback className="text-sm font-semibold bg-gradient-to-r from-blue-500 to-purple-500 text-white">
-                                    {member.profiles[0] && getInitials(member.profiles[0].first_name, member.profiles[0].last_name)}
+                                    {member.profiles[0] && getInitials(member.profiles[0].first_name || '', member.profiles[0].last_name || '')}
                                   </AvatarFallback>
                                 </Avatar>
                               ))}
@@ -578,11 +648,17 @@ export default function DashboardPage() {
                       className={`flex items-start gap-4 p-4 rounded-lg cursor-pointer transition-colors ${
                         notification.unread ? 'bg-blue-50/50 border-l-4 border-blue-500' : 'bg-gray-50/30'
                       }`}
-                      onClick={() => markNotificationAsRead(notification.id)}
+                       onClick={() => {
+                         markNotificationAsRead(notification.id)
+                         if (notification.type === 'profile') {
+                           router.push('/settings')
+                         }
+                       }}
                     >
                       <div className={`w-2 h-2 rounded-full mt-2 ${
                         notification.type === 'match' ? 'bg-green-500' :
-                        notification.type === 'message' ? 'bg-blue-500' : 'bg-gray-500'
+                        notification.type === 'message' ? 'bg-blue-500' :
+                        notification.type === 'profile' ? 'bg-orange-500' : 'bg-gray-500'
                       }`} />
                       <div className="flex-1">
                         <p className="font-medium">{notification.message}</p>

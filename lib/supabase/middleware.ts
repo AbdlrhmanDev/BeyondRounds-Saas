@@ -37,6 +37,28 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
+  // Redirect logged-in users away from login page
+  if (user && request.nextUrl.pathname === "/auth/login") {
+    const url = request.nextUrl.clone()
+    
+    // Get user role from database
+    const { data: userRole } = await supabase.rpc('get_user_role', { uid: user.id })
+    const isAdmin = userRole === 'admin'
+    
+    url.pathname = isAdmin ? "/admin" : "/dashboard"
+    return NextResponse.redirect(url)
+  }
+
+  // If admin lands on /dashboard, send them to /admin
+  if (user && request.nextUrl.pathname === "/dashboard") {
+    const { data: userRole } = await supabase.rpc('get_user_role', { uid: user.id })
+    if (userRole === 'admin') {
+      const url = request.nextUrl.clone()
+      url.pathname = "/admin"
+      return NextResponse.redirect(url)
+    }
+  }
+
   if (
     request.nextUrl.pathname !== "/" &&
     !user &&

@@ -1,8 +1,8 @@
 {
   "crons": [
     {
-      "path": "/api/matching/run-algorithm",
-      "schedule": "0 16 * * 4"
+      "path": "/api/cron/weekly-matching",
+      "schedule": "0 9 * * 1"
     }
   ]
 }

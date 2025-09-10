@@ -169,12 +169,14 @@ export default function LandingPage() {
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"></div>
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="px-10 py-5 text-lg font-semibold border-2 border-violet-200/50 text-violet-700 hover:bg-violet-50/80 hover:border-violet-300/70 transition-all duration-500 hover:scale-105 backdrop-blur-xl bg-white/60 hover:shadow-xl hover:shadow-violet-500/20 group">
-                <span className="flex items-center gap-3">
-                  Learn More
-                  <Globe className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
-                </span>
-              </Button>
+              <Link href="#features">
+                <Button size="lg" variant="outline" className="px-10 py-5 text-lg font-semibold border-2 border-violet-200/50 text-violet-700 hover:bg-violet-50/80 hover:border-violet-300/70 transition-all duration-500 hover:scale-105 backdrop-blur-xl bg-white/60 hover:shadow-xl hover:shadow-violet-500/20 group">
+                  <span className="flex items-center gap-3">
+                    Learn More
+                    <Globe className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+                  </span>
+                </Button>
+              </Link>
             </div>
 
             {/* Trust indicators */}
@@ -244,10 +246,12 @@ export default function LandingPage() {
                       Upload your medical license and ID for quick verification. We ensure all members are legitimate
                       healthcare professionals.
                     </p>
-                    <Button variant="ghost" className="text-violet-600 hover:text-violet-700 hover:bg-violet-50/80 group/btn px-6 py-3 rounded-xl backdrop-blur-sm border border-violet-200/50 hover:border-violet-300/70 transition-all duration-300">
-                      Learn more
-                      <span className="ml-2 transform group-hover/btn:translate-x-1 transition-transform duration-300">→</span>
-                    </Button>
+                    <Link href="/how-it-works">
+                      <Button variant="ghost" className="text-violet-600 hover:text-violet-700 hover:bg-violet-50/80 group/btn px-6 py-3 rounded-xl backdrop-blur-sm border border-violet-200/50 hover:border-violet-300/70 transition-all duration-300">
+                        Learn more
+                        <span className="ml-2 transform group-hover/btn:translate-x-1 transition-transform duration-300">→</span>
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -269,10 +273,12 @@ export default function LandingPage() {
                       Our algorithm matches you with 2-3 doctors based on specialty, interests, location, and availability
                       every Thursday.
                     </p>
-                    <Button variant="ghost" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50/80 group/btn px-6 py-3 rounded-xl backdrop-blur-sm border border-blue-200/50 hover:border-blue-300/70 transition-all duration-300">
-                      Learn more
-                      <span className="ml-2 transform group-hover/btn:translate-x-1 transition-transform duration-300">→</span>
-                    </Button>
+                    <Link href="/how-it-works">
+                      <Button variant="ghost" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50/80 group/btn px-6 py-3 rounded-xl backdrop-blur-sm border border-blue-200/50 hover:border-blue-300/70 transition-all duration-300">
+                        Learn more
+                        <span className="ml-2 transform group-hover/btn:translate-x-1 transition-transform duration-300">→</span>
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -293,10 +299,12 @@ export default function LandingPage() {
                     <p className="text-gray-600 leading-relaxed text-lg mb-8">
                       Chat with your matches, plan meetups, and build lasting friendships with fellow medical professionals.
                     </p>
-                    <Button variant="ghost" className="text-purple-600 hover:text-purple-700 hover:bg-purple-50/80 group/btn px-6 py-3 rounded-xl backdrop-blur-sm border border-purple-200/50 hover:border-purple-300/70 transition-all duration-300">
-                      Learn more
-                      <span className="ml-2 transform group-hover/btn:translate-x-1 transition-transform duration-300">→</span>
-                    </Button>
+                    <Link href="/how-it-works">
+                      <Button variant="ghost" className="text-purple-600 hover:text-purple-700 hover:bg-purple-50/80 group/btn px-6 py-3 rounded-xl backdrop-blur-sm border border-purple-200/50 hover:border-purple-300/70 transition-all duration-300">
+                        Learn more
+                        <span className="ml-2 transform group-hover/btn:translate-x-1 transition-transform duration-300">→</span>
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -738,12 +746,14 @@ export default function LandingPage() {
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
                   </Button>
                 </Link>
-                <Button size="lg" variant="outline" className="px-10 py-5 text-lg font-semibold border-2 border-white/40 text-white hover:bg-white/15 hover:border-white/60 transition-all duration-500 hover:scale-105 backdrop-blur-xl group">
-                  <span className="flex items-center gap-3">
-                    Learn More
-                    <Globe className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
-                  </span>
-                </Button>
+                <Link href="/about">
+                  <Button size="lg" variant="outline" className="px-10 py-5 text-lg font-semibold border-2 border-white/40 text-white hover:bg-white/15 hover:border-white/60 transition-all duration-500 hover:scale-105 backdrop-blur-xl group">
+                    <span className="flex items-center gap-3">
+                      Learn More
+                      <Globe className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+                    </span>
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

@@ -153,7 +153,7 @@ export class MatchingAlgorithm {
       .eq("is_paid", true)
       .not("interests", "is", null)
       .not("availability_slots", "is", null)
-      .gte("created_at", sixWeeksAgo.toISOString())
+      // .gte("created_at", sixWeeksAgo.toISOString())
 
     if (error) {
       console.error("Error fetching eligible users:", error)

@@ -208,40 +208,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-        {/* Enhanced Footer */}
-        <footer className="relative py-20 px-4">
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-gray-800/30 to-transparent"></div>
-          <div className="container mx-auto max-w-6xl relative z-10">
-            <div className="bg-white/15 backdrop-blur-2xl border border-white/20 rounded-3xl p-12 shadow-2xl">
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-4 mb-8">
-                  <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/25 animate-glow">
-                    <Heart className="w-7 h-7 text-white" />
-                  </div>
-                  <span className="text-2xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent">BeyondRounds</span>
-                </div>
-                <p className="text-gray-600 leading-relaxed mb-8 text-lg">Where doctors become lifelong friends.</p>
-                <div className="flex justify-center gap-4 mb-8">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500/20 to-blue-600/20 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-gradient-to-br hover:from-blue-500/30 hover:to-blue-600/30 transition-all duration-300 cursor-pointer hover:scale-110 shadow-lg">
-                    <span className="text-blue-600 text-lg font-bold">𝕏</span>
-                  </div>
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500/20 to-blue-600/20 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-gradient-to-br hover:from-blue-500/30 hover:to-blue-600/30 transition-all duration-300 cursor-pointer hover:scale-110 shadow-lg">
-                    <span className="text-blue-600 text-lg font-bold">in</span>
-                  </div>
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500/20 to-blue-600/20 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-gradient-to-br hover:from-blue-500/30 hover:to-blue-600/30 transition-all duration-300 cursor-pointer hover:scale-110 shadow-lg">
-                    <span className="text-blue-600 text-lg font-bold">f</span>
-                  </div>
-                </div>
-                <div className="border-t border-white/20 pt-8">
-                  <p className="text-gray-600 text-lg font-medium">
-                    &copy; 2024 <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent font-bold">BeyondRounds</span>. All rights reserved.
-                  </p>
-                  <p className="text-gray-500 text-sm mt-2">Made with ❤️ for the medical community</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </footer>
+     
       </div>
     </div>
   )
