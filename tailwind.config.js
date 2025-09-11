@@ -20,6 +20,9 @@ module.exports = {
         'slide-up': 'slide-up 0.6s ease-out forwards',
         'scale-in': 'scale-in 0.4s ease-out forwards',
         'fade-in': 'fade-in 0.8s ease-out forwards',
+        'breathe': 'breathe 4s ease-in-out infinite',
+        'morphing': 'morphing 8s ease-in-out infinite',
+        'particle-float': 'particle-float 4s ease-in-out infinite',
       },
       keyframes: {
         'gradient-shift': {
@@ -73,6 +76,20 @@ module.exports = {
         'fade-in': {
           'from': { opacity: '0' },
           'to': { opacity: '1' }
+        },
+        'breathe': {
+          '0%, 100%': { transform: 'scale(1)', opacity: '0.8' },
+          '50%': { transform: 'scale(1.05)', opacity: '1' }
+        },
+        'morphing': {
+          '0%, 100%': { 'border-radius': '60% 40% 30% 70% / 60% 30% 70% 40%' },
+          '50%': { 'border-radius': '30% 60% 70% 40% / 50% 60% 30% 60%' }
+        },
+        'particle-float': {
+          '0%, 100%': { transform: 'translateY(0px) translateX(0px)' },
+          '25%': { transform: 'translateY(-20px) translateX(10px)' },
+          '50%': { transform: 'translateY(-10px) translateX(-5px)' },
+          '75%': { transform: 'translateY(-30px) translateX(15px)' }
         }
       },
       fontFamily: {
@@ -118,6 +135,39 @@ module.exports = {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        '4xl': '2rem',
+        '5xl': '2.5rem',
+        '6xl': '3rem',
+      },
+      spacing: {
+        '18': '4.5rem',
+        '22': '5.5rem',
+        '26': '6.5rem',
+        '30': '7.5rem',
+        '34': '8.5rem',
+        '38': '9.5rem',
+        '42': '10.5rem',
+        '46': '11.5rem',
+        '50': '12.5rem',
+        '54': '13.5rem',
+        '58': '14.5rem',
+        '62': '15.5rem',
+        '66': '16.5rem',
+        '70': '17.5rem',
+        '74': '18.5rem',
+        '78': '19.5rem',
+        '82': '20.5rem',
+        '86': '21.5rem',
+        '90': '22.5rem',
+        '94': '23.5rem',
+        '98': '24.5rem',
+      },
+      fontSize: {
+        '2xs': ['0.625rem', { lineHeight: '0.75rem' }],
+        '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
+        '10xl': ['10rem', { lineHeight: '1' }],
+        '11xl': ['12rem', { lineHeight: '1' }],
+        '12xl': ['14rem', { lineHeight: '1' }],
       },
     },
   },

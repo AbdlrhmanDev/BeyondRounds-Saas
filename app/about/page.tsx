@@ -34,76 +34,67 @@ export default function AboutPage() {
             
             <h1 className="text-5xl lg:text-6xl font-bold mb-6 text-balance leading-tight">
               <span className="bg-gradient-to-r from-violet-600 via-blue-600 to-cyan-500 bg-clip-text text-transparent animate-gradient-text">
-                Connecting Medical
+                Where Doctors
               </span>
               <br />
               <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-violet-600 bg-clip-text text-transparent">
-                Professionals Beyond
-              </span>
-              <br />
-              <span className="bg-gradient-to-r from-purple-600 via-violet-600 to-blue-600 bg-clip-text text-transparent">
-                Hospital Walls
+                Become Friends
               </span>
             </h1>
             <p className="text-xl lg:text-2xl text-gray-600 mb-12 text-pretty max-w-3xl mx-auto leading-relaxed">
-              BeyondRounds was founded by doctors who understood the isolation that comes with medical practice. We
-              believe that 
-              <span className="bg-gradient-to-r from-violet-600 to-blue-600 bg-clip-text text-transparent font-semibold"> meaningful professional relationships</span> lead to better patient care and personal fulfillment.
+              The idea for BeyondRounds was born during one of those late-night shifts that every doctor knows too well. After years of moving between hospitals, specializing, and diving deep into the demanding world of medicine, I found myself surrounded by colleagues but genuinely lonely.
             </p>
           </div>
         </section>
 
-        {/* Mission Section */}
+        {/* Personal Story Section */}
         <section className="py-24 px-4 relative">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="text-center border-0 shadow-lg">
-              <CardHeader>
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <Target className="w-6 h-6 text-blue-600" />
-                </div>
-                <CardTitle>Our Mission</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  To create meaningful connections between medical professionals, fostering collaboration, support, and
-                  friendship that extends beyond the clinical setting.
-                </CardDescription>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center border-0 shadow-lg">
-              <CardHeader>
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <Shield className="w-6 h-6 text-green-600" />
-                </div>
-                <CardTitle>Our Values</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  Trust, professionalism, and authenticity guide everything we do. We maintain the highest standards of
-                  verification and privacy for our medical community.
-                </CardDescription>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center border-0 shadow-lg">
-              <CardHeader>
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <Users className="w-6 h-6 text-purple-600" />
-                </div>
-                <CardTitle>Our Vision</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  A world where every medical professional has access to a supportive network of peers, reducing burnout
-                  and improving patient outcomes through collaboration.
-                </CardDescription>
-              </CardContent>
-            </Card>
+          <div className="container mx-auto max-w-4xl">
+            <div className="prose prose-lg max-w-none text-gray-600">
+              <p className="mb-6">
+                Don't get me wrong – I loved connecting with people. I've always been social, meeting new faces, sharing stories, and building connections wherever I went. But there was something missing. The conversations always seemed to circle back to cases, protocols, and the latest medical research. While professionally enriching, I craved something deeper – real friendships that went beyond the hospital walls.
+              </p>
+              
+              <p className="mb-6">
+                Everything changed one evening when I was introduced to four other doctors through a mutual friend. We met for drinks, and what started as casual conversation quickly evolved into something special. We discovered we shared the same passion for hiking, had similar music tastes, and – surprisingly – the same quirky sense of humor that only seemed to make sense to fellow doctors.
+              </p>
+              
+              <p className="mb-6">
+                One of these doctors, now one of my closest friends, lived in Berlin. Despite the distance, we found ourselves calling each other regularly, sharing not just our professional challenges, but our weekend adventures, travel plans, and life dreams. It was then I realized something profound: there's an unspoken understanding between doctors that's hard to find elsewhere.
+              </p>
+              
+              <p className="mb-6">
+                We get each other. We understand the unique pressures, the irregular schedules, the weight of responsibility we carry. But more importantly, we understand the person behind the white coat – someone who chose medicine not just as a career, but as a calling.
+              </p>
+              
+              <p className="mb-6">
+                That's when it hit me: if I felt this isolated despite working in environments filled with brilliant medical professionals, how many other doctors were experiencing the same thing? How many were moving to new cities for residencies, fellowships, or positions, struggling to build meaningful friendships outside their specialty?
+              </p>
+              
+              <div className="text-center my-12">
+                <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                  <span className="bg-gradient-to-r from-violet-600 to-blue-600 bg-clip-text text-transparent">
+                    BeyondRounds was born from this realization.
+                  </span>
+                </h2>
+              </div>
+              
+              <p className="mb-6">
+                We created BeyondRounds because we believe every doctor deserves to find their tribe – people who understand the unique rhythm of medical life but share interests that extend far beyond medicine. Whether you're passionate about rock climbing, love exploring new restaurants, are a weekend warrior on the tennis court, or prefer quiet coffee conversations about books and travel, there are doctors out there who share your interests and are looking for the same genuine connections you are.
+              </p>
+              
+              <p className="mb-6">
+                Our mission is simple: to help doctors discover friendships that enrich their lives outside the hospital. Because when you find your people – your tribe – everything else falls into place.
+              </p>
+              
+              <div className="text-center mt-12 p-8 bg-gradient-to-r from-violet-50 to-blue-50 rounded-2xl">
+                <p className="text-xl font-semibold text-gray-800 italic">
+                  Join thousands of doctors who've already found their tribe. Your next great friendship is just one match away.
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
       {/* Stats Section */}
       <section className="py-16 px-4">

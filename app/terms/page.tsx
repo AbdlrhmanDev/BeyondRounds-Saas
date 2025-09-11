@@ -35,7 +35,7 @@ export default function TermsPage() {
           <p className="text-xl text-gray-600 mb-8 text-pretty max-w-3xl mx-auto">
             These terms govern your use of BeyondRounds. By using our platform, you agree to these terms and conditions.
           </p>
-          <p className="text-sm text-gray-500">Last updated: January 2024</p>
+          <p className="text-sm text-gray-500">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
         </div>
       </section>
 
@@ -67,32 +67,33 @@ export default function TermsPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Users className="w-5 h-5 text-green-600" />
-                  Eligibility & Account Requirements
+                  Eligibility
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Professional Requirements</h4>
-                  <p className="text-gray-600 text-sm">
-                    BeyondRounds is exclusively for licensed medical professionals. You must be a practicing doctor,
-                    nurse, physician assistant, or other licensed healthcare provider to use our platform.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Verification Process</h4>
-                  <p className="text-gray-600 text-sm">
-                    All users must complete our verification process by providing valid medical credentials and
-                    government-issued identification. Providing false information will result in immediate account
-                    termination.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Account Responsibility</h4>
-                  <p className="text-gray-600 text-sm">
-                    You are responsible for maintaining the confidentiality of your account credentials and for all
-                    activities that occur under your account. Notify us immediately of any unauthorized use.
-                  </p>
-                </div>
+                <ul className="text-gray-600 text-sm space-y-2 ml-4 list-disc">
+                  <li>You must be a licensed medical doctor, medical student, resident, or fellow</li>
+                  <li>You must be at least 18 years old</li>
+                  <li>You must provide accurate verification information</li>
+                  <li>You agree to maintain professional conduct at all times</li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-blue-600" />
+                  Account & Verification
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <ul className="text-gray-600 text-sm space-y-2 ml-4 list-disc">
+                  <li>You must verify your medical credentials through license upload</li>
+                  <li>False information or impersonation results in immediate termination</li>
+                  <li>You're responsible for maintaining account security</li>
+                  <li>One account per person</li>
+                </ul>
               </CardContent>
             </Card>
 
@@ -100,66 +101,17 @@ export default function TermsPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Shield className="w-5 h-5 text-purple-600" />
-                  Platform Use & Conduct
+                  Code of Conduct
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Acceptable Use</h4>
-                  <p className="text-gray-600 text-sm">
-                    BeyondRounds is designed for professional networking and friendship building among medical
-                    professionals. Use the platform respectfully and in accordance with professional medical ethics.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Prohibited Activities</h4>
-                  <ul className="text-gray-600 text-sm space-y-1 ml-4 list-disc">
-                    <li>Harassment, discrimination, or inappropriate behavior</li>
-                    <li>Sharing patient information or confidential medical data</li>
-                    <li>Commercial solicitation or unauthorized marketing</li>
-                    <li>Impersonation or providing false information</li>
-                    <li>Attempting to circumvent platform security measures</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Content Guidelines</h4>
-                  <p className="text-gray-600 text-sm">
-                    All communications must be professional and appropriate. We reserve the right to monitor
-                    conversations and remove content that violates our community standards.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <CreditCard className="w-5 h-5 text-orange-600" />
-                  Subscription & Payment Terms
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Subscription Plans</h4>
-                  <p className="text-gray-600 text-sm">
-                    BeyondRounds offers trial, monthly, and annual subscription plans. All prices are listed in GBP and
-                    include applicable taxes. Subscription fees are non-refundable except as specified in our guarantee.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">30-Day Friendship Guarantee</h4>
-                  <p className="text-gray-600 text-sm">
-                    If you don't make meaningful connections within 30 days of your first paid subscription, we'll
-                    provide a full refund. Contact support within the guarantee period to request a refund.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Cancellation</h4>
-                  <p className="text-gray-600 text-sm">
-                    You may cancel your subscription at any time through your account settings. Cancellation takes
-                    effect at the end of your current billing period. No partial refunds for unused time.
-                  </p>
-                </div>
+                <p className="text-gray-600 text-sm mb-4">Members must:</p>
+                <ul className="text-gray-600 text-sm space-y-1 ml-4 list-disc">
+                  <li>Treat all members with respect and professionalism</li>
+                  <li>Attend scheduled meetups or provide reasonable notice</li>
+                  <li>Maintain confidentiality about other members' personal information</li>
+                  <li>Report inappropriate behavior immediately</li>
+                </ul>
               </CardContent>
             </Card>
 
@@ -167,76 +119,114 @@ export default function TermsPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <AlertTriangle className="w-5 h-5 text-red-600" />
-                  Disclaimers & Limitations
+                  Prohibited Behavior
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Platform Availability</h4>
-                  <p className="text-gray-600 text-sm">
-                    We strive to maintain platform availability but cannot guarantee uninterrupted service. We are not
-                    liable for temporary outages or technical issues beyond our reasonable control.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">User Interactions</h4>
-                  <p className="text-gray-600 text-sm">
-                    BeyondRounds facilitates connections but is not responsible for the actions or behavior of users. We
-                    encourage professional conduct but cannot guarantee the quality of interactions or relationships
-                    formed.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Medical Advice Disclaimer</h4>
-                  <p className="text-gray-600 text-sm">
-                    BeyondRounds is not intended for medical consultations or patient care. Any medical discussions are
-                    for professional networking purposes only and should not be considered medical advice.
-                  </p>
-                </div>
+                <p className="text-gray-600 text-sm mb-4">The following will result in immediate termination:</p>
+                <ul className="text-gray-600 text-sm space-y-1 ml-4 list-disc">
+                  <li>Harassment, discrimination, or hate speech</li>
+                  <li>Solicitation for professional services or business</li>
+                  <li>Sharing personal information without consent</li>
+                  <li>Using the platform for dating or romantic purposes</li>
+                  <li>Spam or commercial promotion</li>
+                </ul>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Termination & Account Closure</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <CreditCard className="w-5 h-5 text-orange-600" />
+                  Subscription & Billing
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Voluntary Termination</h4>
-                  <p className="text-gray-600 text-sm">
-                    You may delete your account at any time through your account settings. Upon deletion, your profile
-                    and personal information will be removed from the platform.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Platform Termination</h4>
-                  <p className="text-gray-600 text-sm">
-                    We reserve the right to suspend or terminate accounts that violate these terms or engage in
-                    inappropriate behavior. Serious violations may result in immediate termination without refund.
-                  </p>
-                </div>
+                <ul className="text-gray-600 text-sm space-y-1 ml-4 list-disc">
+                  <li>All subscriptions are recurring until cancelled</li>
+                  <li>Prices may change with 30 days notice</li>
+                  <li>Refunds only available under our 30-Day Friendship Guarantee</li>
+                  <li>No partial month refunds after the guarantee period</li>
+                </ul>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Contact & Legal Information</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-blue-600" />
+                  Intellectual Property
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-gray-600 text-sm">
+                  All content, features, and functionality are owned by BeyondRounds and protected by international copyright and trademark laws.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-green-600" />
+                  Privacy & Data
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-gray-600 text-sm">
+                  Your privacy is important to us. Please review our Privacy Policy for details on how we collect, use, and protect your information.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <AlertTriangle className="w-5 h-5 text-red-600" />
+                  Limitation of Liability
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-gray-600 text-sm mb-4">BeyondRounds is not responsible for:</p>
+                <ul className="text-gray-600 text-sm space-y-1 ml-4 list-disc">
+                  <li>Actions of other members during meetups</li>
+                  <li>Personal safety during offline meetings</li>
+                  <li>Disputes between members</li>
+                  <li>Loss or damage resulting from service use</li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Termination</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-gray-600 text-sm">
+                  We may terminate accounts for violation of these terms. Upon termination, your right to use the service ceases immediately.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Changes to Terms</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-gray-600 text-sm">
+                  We may update these terms occasionally. Continued use after changes constitutes acceptance of new terms.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Contact</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-gray-600 text-sm mb-4">
-                  For questions about these Terms of Service, please contact us:
+                  Questions about these terms? Contact us at <strong>legal@beyondrounds.com</strong>
                 </p>
-                <div className="space-y-2 text-sm">
-                  <p>
-                    <strong>Email:</strong> legal@beyondrounds.com
-                  </p>
-                  <p>
-                    <strong>Address:</strong> BeyondRounds Ltd., 123 Medical District, London, UK EC1A 1BB
-                  </p>
-                  <p>
-                    <strong>Governing Law:</strong> These terms are governed by the laws of England and Wales
-                  </p>
-                </div>
               </CardContent>
             </Card>
           </div>

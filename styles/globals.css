@@ -124,6 +124,25 @@
 }
 
 /* Enhanced Custom animations for modern glassmorphism design */
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes morphing {
+  0%, 100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+  50% {
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+  }
+}
 @keyframes gradient-shift {
   0%, 100% {
     background-position: 0% 50%;
@@ -349,6 +368,14 @@
     animation: particle-float 4s ease-in-out infinite;
   }
 
+  .animate-breathe {
+    animation: breathe 4s ease-in-out infinite;
+  }
+
+  .animate-morphing {
+    animation: morphing 8s ease-in-out infinite;
+  }
+
   /* Enhanced Glassmorphism utilities */
   .glass {
     background: rgba(255, 255, 255, 0.1);
@@ -514,7 +541,7 @@
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   }
 
-  /* Modern Shadows */
+  /* Enhanced Modern Shadows */
   .shadow-glass {
     box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
   }
@@ -529,6 +556,110 @@
 
   .shadow-colored-lg {
     box-shadow: 0 16px 64px rgba(139, 92, 246, 0.4);
+  }
+
+  .shadow-3xl {
+    box-shadow: 0 35px 70px -15px rgba(0, 0, 0, 0.3);
+  }
+
+  .shadow-4xl {
+    box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.25);
+  }
+
+  .shadow-inner-lg {
+    box-shadow: inset 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  .shadow-neon {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.5), 0 0 60px rgba(139, 92, 246, 0.2);
+  }
+
+  .shadow-neon-lg {
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.6), 0 0 80px rgba(139, 92, 246, 0.3);
+  }
+
+  /* Enhanced Gradient Utilities */
+  .bg-gradient-mesh {
+    background: 
+      radial-gradient(at 40% 20%, hsla(28,100%,74%,1) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, hsla(189,100%,56%,1) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, hsla(355,100%,93%,1) 0px, transparent 50%),
+      radial-gradient(at 80% 50%, hsla(340,100%,76%,1) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, hsla(22,100%,77%,1) 0px, transparent 50%),
+      radial-gradient(at 80% 100%, hsla(242,100%,70%,1) 0px, transparent 50%),
+      radial-gradient(at 0% 0%, hsla(343,100%,76%,1) 0px, transparent 50%);
+  }
+
+  .bg-gradient-aurora {
+    background: 
+      linear-gradient(45deg, #12c2e9, #c471ed, #f64f59),
+      linear-gradient(135deg, #667eea, #764ba2),
+      linear-gradient(225deg, #f093fb, #f5576c),
+      linear-gradient(315deg, #4facfe, #00f2fe);
+    background-size: 400% 400%, 400% 400%, 400% 400%, 400% 400%;
+    animation: gradient-shift 15s ease infinite;
+  }
+
+  /* Enhanced Text Effects */
+  .text-glow {
+    text-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+  }
+
+  .text-glow-lg {
+    text-shadow: 0 0 40px rgba(139, 92, 246, 0.7);
+  }
+
+  .text-outline {
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.5);
+    text-stroke: 1px rgba(255, 255, 255, 0.5);
+  }
+
+  .text-gradient-rainbow {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7, #dda0dd);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-shift 8s ease infinite;
+  }
+
+  /* Interactive Hover Effects */
+  .hover-lift {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  .hover-glow {
+    transition: all 0.3s ease;
+  }
+
+  .hover-glow:hover {
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+    transform: scale(1.05);
+  }
+
+  .hover-tilt {
+    transition: all 0.3s ease;
+  }
+
+  .hover-tilt:hover {
+    transform: perspective(1000px) rotateX(10deg) rotateY(10deg) rotateZ(2deg);
+  }
+
+  /* Modern Borders */
+  .border-gradient {
+    border: 2px solid;
+    border-image: linear-gradient(45deg, #667eea, #764ba2) 1;
+  }
+
+  .border-gradient-animated {
+    border: 2px solid;
+    border-image: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c) 1;
+    animation: gradient-shift 3s ease infinite;
   }
 }
 

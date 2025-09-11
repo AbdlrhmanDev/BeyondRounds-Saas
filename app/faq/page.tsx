@@ -6,25 +6,25 @@ import Link from "next/link"
 
 const faqCategories = [
   {
-    title: "Getting Started",
+    title: "General Questions",
     icon: Users,
     color: "text-blue-600",
     bgColor: "bg-blue-100",
     faqs: [
       {
+        question: "What is BeyondRounds?",
+        answer:
+          "BeyondRounds is a premium social club exclusively for verified doctors. We match you weekly with 2-3 other doctors in your city based on shared interests, hobbies, and availability – not for professional networking, but to build genuine friendships.",
+      },
+      {
+        question: "How is this different from other networking apps?",
+        answer:
+          "We're not about professional networking or dating. BeyondRounds is specifically designed for doctors to make real friends who understand their lifestyle and share their personal interests outside of medicine.",
+      },
+      {
         question: "Who can join BeyondRounds?",
         answer:
-          "BeyondRounds is exclusively for verified medical professionals including doctors, nurses, physician assistants, and other licensed healthcare providers. All members must complete our verification process.",
-      },
-      {
-        question: "How does the verification process work?",
-        answer:
-          "Upload your medical license, government ID, and a selfie. Our team reviews all documents within 48 hours. We maintain strict verification standards to ensure a trusted community.",
-      },
-      {
-        question: "What happens after I'm verified?",
-        answer:
-          "Once verified and subscribed, you'll start receiving weekly matches every Thursday at 4 PM. You'll be matched with 2-3 other doctors based on your preferences and compatibility.",
+          "Only verified medical doctors, including medical students, residents, fellows, and practicing physicians. We manually verify all members through license verification and photo confirmation.",
       },
     ],
   },
@@ -35,65 +35,65 @@ const faqCategories = [
     bgColor: "bg-green-100",
     faqs: [
       {
-        question: "How does the matching algorithm work?",
+        question: "How does the matching work?",
         answer:
-          "Our AI considers your specialty (30%), interests (40%), location (20%), and availability (10%) to create compatible groups. We also ensure gender balance and prevent repeat matches within 6 weeks.",
+          "Every Thursday at 4 PM, our algorithm creates small groups of 3–4 doctors based on your specialty, interests, availability, and location. You'll receive an email and in-app notification when your new group is ready.",
       },
       {
-        question: "Can I choose who I'm matched with?",
+        question: "What if I don't click with my group?",
         answer:
-          "While you can't select specific individuals, you can set preferences for specialty, interests, gender, and availability. Our algorithm uses these to find the best matches for you.",
+          "That's completely normal! You'll get a new group every week, and our algorithm learns from your feedback to make better matches over time. We also ensure you won't be matched with the same person again for at least 6 weeks.",
       },
       {
-        question: "What if I don't connect with my matches?",
+        question: "Can I choose my own matches?",
         answer:
-          "That's completely normal! Not every match will lead to friendship. You'll get new matches every week, and our 30-day guarantee ensures you'll find meaningful connections.",
+          "Our curated approach is what makes BeyondRounds special. Trust our algorithm – it's designed by doctors, for doctors, and gets smarter with each match.",
       },
     ],
   },
   {
-    title: "Pricing & Billing",
+    title: "Meetings & Safety",
+    icon: Shield,
+    color: "text-orange-600",
+    bgColor: "bg-orange-100",
+    faqs: [
+      {
+        question: "Where do groups meet?",
+        answer:
+          "Groups decide together where to meet within your city. Popular options include coffee shops, restaurants, parks, or activity-based meetups like hiking or sports.",
+      },
+      {
+        question: "Is it safe to meet strangers?",
+        answer:
+          "All members are verified doctors, and we encourage meeting in public places. Our AI facilitator, RoundsBot, helps groups plan safe, public meetups and provides conversation starters.",
+      },
+      {
+        question: "What if someone doesn't show up?",
+        answer:
+          "We take no-shows seriously. Members get one warning, a temporary pause after the second no-show, and potential removal after the third.",
+      },
+    ],
+  },
+  {
+    title: "Pricing & Membership",
     icon: CreditCard,
     color: "text-purple-600",
     bgColor: "bg-purple-100",
     faqs: [
       {
-        question: "What subscription plans are available?",
+        question: "How much does BeyondRounds cost?",
         answer:
-          "We offer a 7-day trial (£9.99), monthly subscription (£29.99/month), and annual subscription (£299.99/year with 2 months free). All plans include unlimited matches and full platform access.",
+          "Trial: €9.99 (first month) • Founders: €14.99/month (limited time) • Core: €29.99/month • Premium: €49.99/month (includes advanced filtering)",
       },
       {
-        question: "What's the 30-day friendship guarantee?",
+        question: "Can I cancel anytime?",
         answer:
-          "If you don't make meaningful connections within 30 days of subscribing, we'll provide a full refund. No questions asked. We're confident in our platform's ability to help you connect.",
+          "Yes, you can cancel your subscription at any time through your account settings. You'll continue to receive matches until your current billing period ends.",
       },
       {
-        question: "Can I cancel my subscription anytime?",
+        question: "What's the 30-Day Friendship Guarantee?",
         answer:
-          "Yes! You can cancel your subscription at any time. You'll continue to have access until the end of your current billing period, and no future charges will occur.",
-      },
-    ],
-  },
-  {
-    title: "Privacy & Security",
-    icon: Shield,
-    color: "text-red-600",
-    bgColor: "bg-red-100",
-    faqs: [
-      {
-        question: "How is my personal information protected?",
-        answer:
-          "We use enterprise-grade security with end-to-end encryption. All data is stored in EU servers with strict GDPR compliance. Verification documents are automatically deleted after 90 days.",
-      },
-      {
-        question: "Who can see my profile information?",
-        answer:
-          "Only your matched group members can see your profile details. We never share your information with third parties or use it for marketing purposes outside the platform.",
-      },
-      {
-        question: "Can I control what information is shared?",
-        answer:
-          "Yes! You have full control over your profile visibility. You can choose what information to share and update your preferences at any time in your dashboard.",
+          "If you don't have at least 2 meaningful meetups in your first 30 days, we'll provide a full refund. We're confident you'll love the connections you make!",
       },
     ],
   },

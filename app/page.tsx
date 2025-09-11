@@ -44,90 +44,18 @@ export default function LandingPage() {
 
       {/* Glass morphism overlay */}
       <div className="min-h-screen bg-white/5 backdrop-blur-[1px] supports-backdrop-blur:bg-white/5 supports-no-backdrop-blur:bg-white/90">
-        {/* Enhanced Glassmorphic Navigation */}
-        <header className="sticky top-0 z-50 border-b border-white/20 backdrop-blur-2xl bg-white/10 supports-backdrop-blur:bg-white/8 supports-no-backdrop-blur:bg-white/95 transition-all duration-300 shadow-lg shadow-violet-500/5">
-          <div className="container mx-auto px-6 py-5">
-            <nav className="flex items-center justify-between">
-              {/* Enhanced Logo */}
-              <Link href="/" className="flex items-center gap-3 group">
-                <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/25 group-hover:shadow-emerald-500/40 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                  <Heart className="w-6 h-6 text-white group-hover:animate-pulse" />
-                </div>
-                <span className="text-2xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent group-hover:from-emerald-700 group-hover:via-teal-700 group-hover:to-cyan-700 transition-all duration-300">
-                  BeyondRounds
-                </span>
-              </Link>
-
-              {/* Enhanced Center Navigation */}
-              <div className="hidden md:flex items-center gap-10">
-                <Link href="#features" className="text-gray-700 hover:text-emerald-600 font-semibold text-lg transition-all duration-300 relative group px-3 py-2 rounded-lg hover:bg-white/20 hover:backdrop-blur-sm">
-                  Features
-                  <span className="absolute -bottom-1 left-0 w-0 h-1 bg-gradient-to-r from-emerald-500 to-cyan-500 transition-all duration-300 group-hover:w-full rounded-full"></span>
-                </Link>
-                <Link href="/pricing" className="text-gray-700 hover:text-emerald-600 font-semibold text-lg transition-all duration-300 relative group px-3 py-2 rounded-lg hover:bg-white/20 hover:backdrop-blur-sm">
-                  Pricing
-                  <span className="absolute -bottom-1 left-0 w-0 h-1 bg-gradient-to-r from-emerald-500 to-cyan-500 transition-all duration-300 group-hover:w-full rounded-full"></span>
-                </Link>
-                <Link href="/about" className="text-gray-700 hover:text-emerald-600 font-semibold text-lg transition-all duration-300 relative group px-3 py-2 rounded-lg hover:bg-white/20 hover:backdrop-blur-sm">
-                  About
-                  <span className="absolute -bottom-1 left-0 w-0 h-1 bg-gradient-to-r from-emerald-500 to-cyan-500 transition-all duration-300 group-hover:w-full rounded-full"></span>
-                </Link>
-                <Link href="/contact" className="text-gray-700 hover:text-emerald-600 font-semibold text-lg transition-all duration-300 relative group px-3 py-2 rounded-lg hover:bg-white/20 hover:backdrop-blur-sm">
-                  Contact
-                  <span className="absolute -bottom-1 left-0 w-0 h-1 bg-gradient-to-r from-emerald-500 to-cyan-500 transition-all duration-300 group-hover:w-full rounded-full"></span>
-                </Link>
-              </div>
-
-              {/* Right side - Auth aware */}
-              <div className="flex items-center gap-3">
-                {/* Enhanced Command Menu */}
-                <Button variant="ghost" size="sm" className="hidden lg:flex items-center gap-2 text-gray-600 hover:text-emerald-600 hover:bg-white/30 hover:backdrop-blur-sm transition-all duration-300 rounded-lg px-3 py-2">
-                  <Command className="w-4 h-4" />
-                  <span className="text-sm font-medium">⌘K</span>
-                </Button>
-
-                {loading ? (
-                  <div className="flex items-center gap-3">
-                    <div className="w-20 h-9 bg-gray-200/50 animate-pulse rounded-lg"></div>
-                    <div className="w-24 h-9 bg-gray-200/50 animate-pulse rounded-lg"></div>
-                  </div>
-                ) : user ? (
-                  // Authenticated state
-                  <Link href="/dashboard">
-                    <Button className="bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-700 hover:to-blue-700 text-white shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 transition-all duration-300 hover:scale-105">
-                      Dashboard
-                    </Button>
-                  </Link>
-                ) : (
-                  // Unauthenticated state
-                  <div className="flex items-center gap-3">
-                    <Link href="/auth/login">
-                      <Button variant="ghost" className="text-gray-700 hover:text-emerald-600 hover:bg-white/30 hover:backdrop-blur-sm transition-all duration-300 font-semibold px-6 py-2 rounded-lg">
-                        Log In
-                      </Button>
-                    </Link>
-                    <Link href="/auth/sign-up">
-                      <Button className="relative overflow-hidden bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all duration-300 hover:scale-105 group btn-shimmer">
-                        <span className="relative z-10 font-semibold">Join Now</span>
-                        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out"></div>
-                      </Button>
-                    </Link>
-                  </div>
-                )}
-              </div>
-            </nav>
-          </div>
-        </header>
 
         {/* Hero Section */}
         <section className="relative py-32 px-4 overflow-hidden">
-          {/* Enhanced floating particles */}
+          {/* Enhanced floating particles with more variety */}
           <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-20 left-10 w-3 h-3 bg-gradient-to-r from-violet-400/60 to-purple-500/60 rounded-full animate-pulse"></div>
-            <div className="absolute top-40 right-20 w-2 h-2 bg-gradient-to-r from-blue-400/60 to-cyan-500/60 rounded-full animate-bounce"></div>
-            <div className="absolute bottom-40 left-1/4 w-2.5 h-2.5 bg-gradient-to-r from-emerald-400/60 to-teal-500/60 rounded-full animate-ping"></div>
-            <div className="absolute top-1/2 right-1/3 w-1.5 h-1.5 bg-gradient-to-r from-pink-400/60 to-rose-500/60 rounded-full animate-pulse"></div>
-            <div className="absolute bottom-20 right-1/4 w-3 h-3 bg-gradient-to-r from-indigo-400/60 to-violet-500/60 rounded-full animate-bounce"></div>
+            <div className="absolute top-20 left-10 w-3 h-3 bg-gradient-to-r from-violet-400/60 to-purple-500/60 rounded-full animate-pulse shadow-lg shadow-violet-500/30"></div>
+            <div className="absolute top-40 right-20 w-2 h-2 bg-gradient-to-r from-blue-400/60 to-cyan-500/60 rounded-full animate-bounce shadow-lg shadow-blue-500/30"></div>
+            <div className="absolute bottom-40 left-1/4 w-2.5 h-2.5 bg-gradient-to-r from-emerald-400/60 to-teal-500/60 rounded-full animate-ping shadow-lg shadow-emerald-500/30"></div>
+            <div className="absolute top-1/2 right-1/3 w-1.5 h-1.5 bg-gradient-to-r from-pink-400/60 to-rose-500/60 rounded-full animate-pulse shadow-lg shadow-pink-500/30"></div>
+            <div className="absolute bottom-20 right-1/4 w-3 h-3 bg-gradient-to-r from-indigo-400/60 to-violet-500/60 rounded-full animate-bounce shadow-lg shadow-indigo-500/30"></div>
+            <div className="absolute top-1/3 left-1/3 w-4 h-4 bg-gradient-to-r from-yellow-400/40 to-orange-500/40 rounded-full animate-float"></div>
+            <div className="absolute bottom-1/3 right-1/5 w-2 h-2 bg-gradient-to-r from-green-400/50 to-emerald-500/50 rounded-full animate-float-delayed"></div>
           </div>
 
           <div className="container mx-auto text-center max-w-5xl relative z-10">
@@ -159,24 +87,30 @@ export default function LandingPage() {
 
             {/* Enhanced CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
-              <Link href={user ? "/dashboard" : "/auth/sign-up"}>
-                <Button size="lg" className="relative overflow-hidden bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-white px-10 py-5 text-lg font-bold shadow-2xl shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all duration-500 hover:scale-110 group btn-shimmer animate-glow border border-white/20">
-                  <span className="relative z-10 flex items-center gap-3">
-                    {user ? "Go to Dashboard" : "Start Connecting Today"}
-                    <div className="w-2 h-2 bg-white/90 rounded-full animate-pulse group-hover:animate-spin"></div>
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/40 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out"></div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"></div>
-                </Button>
-              </Link>
-              <Link href="#features">
-                <Button size="lg" variant="outline" className="px-10 py-5 text-lg font-semibold border-2 border-violet-200/50 text-violet-700 hover:bg-violet-50/80 hover:border-violet-300/70 transition-all duration-500 hover:scale-105 backdrop-blur-xl bg-white/60 hover:shadow-xl hover:shadow-violet-500/20 group">
-                  <span className="flex items-center gap-3">
-                    Learn More
-                    <Globe className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
-                  </span>
-                </Button>
-              </Link>
+              <div className="group relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/30 to-cyan-500/30 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
+                <Link href={user ? "/dashboard" : "/auth/sign-up"}>
+                  <Button size="lg" className="relative overflow-hidden bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-white px-12 py-6 text-xl font-bold shadow-3xl shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all duration-500 hover:scale-110 group btn-shimmer animate-glow border border-white/20 rounded-2xl">
+                    <span className="relative z-10 flex items-center gap-3">
+                      {user ? "Go to Dashboard" : "Start Connecting Today"}
+                      <div className="w-3 h-3 bg-white/90 rounded-full animate-pulse group-hover:animate-spin shadow-lg shadow-white/50"></div>
+                    </span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/40 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"></div>
+                  </Button>
+                </Link>
+              </div>
+              <div className="group relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-violet-500/20 to-purple-500/20 rounded-2xl blur-lg group-hover:blur-xl transition-all duration-500"></div>
+                <Link href="#features">
+                  <Button size="lg" variant="outline" className="relative px-12 py-6 text-xl font-semibold border-2 border-violet-200/50 text-violet-700 hover:bg-violet-50/80 hover:border-violet-300/70 transition-all duration-500 hover:scale-105 backdrop-blur-xl bg-white/60 hover:shadow-2xl hover:shadow-violet-500/20 group rounded-2xl">
+                    <span className="flex items-center gap-3">
+                      Learn More
+                      <Globe className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+                    </span>
+                  </Button>
+                </Link>
+              </div>
             </div>
 
             {/* Trust indicators */}

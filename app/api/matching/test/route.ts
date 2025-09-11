@@ -1,56 +1,46 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase/server"
-import { MatchingAlgorithm } from "@/lib/matching-algorithm"
+import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
 
-export async function GET(request: NextRequest) {
+export async function POST() {
   try {
-    // Only allow in development
-    if (process.env.NODE_ENV === "production") {
-      return NextResponse.json({ error: "Test endpoint not available in production" }, { status: 403 })
+    const supabase = await createClient()
+    
+    // Get current user
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const supabase = await createClient()
-    const algorithm = new MatchingAlgorithm()
+    // Check if user is admin
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
 
-    // Get eligible users for testing
-    const { data: users, error } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("is_verified", true)
-      .eq("is_paid", true)
-      .not("interests", "is", null)
-      .not("availability_slots", "is", null)
+    if (profile?.role !== 'admin') {
+      return NextResponse.json({ error: 'Admin access required' }, { status: 403 })
+    }
+
+    // Trigger manual matching
+    const { data: result, error } = await supabase
+      .rpc('trigger_manual_matching')
 
     if (error) {
-      throw error
+      console.error('Error triggering manual matching:', error)
+      return NextResponse.json({ error: error.message }, { status: 500 })
     }
-
-    console.log(`Found ${users?.length || 0} eligible users for matching`)
-
-    // Run algorithm without saving
-    const groups = await algorithm.createMatches(supabase)
 
     return NextResponse.json({
       success: true,
-      eligibleUsers: users?.length || 0,
-      groupsCreated: groups.length,
-      groups: groups.map((g) => ({
-        groupId: g.groupId,
-        memberCount: g.members.length,
-        averageScore: g.averageScore.toFixed(3),
-        members: g.members.map((m) => ({
-          id: m.id,
-          name: `${m.first_name} ${m.last_name}`,
-          specialty: m.specialty,
-          city: m.city,
-          gender: m.gender,
-          interests: m.interests,
-          availability: m.availability_slots,
-        })),
-      })),
+      data: result
     })
-  } catch (error: any) {
-    console.error("Error testing matching algorithm:", error)
-    return NextResponse.json({ error: "Failed to test matching algorithm", details: error.message }, { status: 500 })
+
+  } catch (error) {
+    console.error('Error in matching test API:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
   }
 }

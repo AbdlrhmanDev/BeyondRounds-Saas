@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Heart } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -80,24 +81,51 @@ export default function Page() {
   }
 
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm">
-        <div className="flex flex-col gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl">Sign Up</CardTitle>
-              <CardDescription>Create your account to get started</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSignUp}>
-                <div className="flex flex-col gap-6">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="w-full bg-transparent"
-                    onClick={handleGoogleSignUp}
-                    disabled={isGoogleLoading || isLoading}
-                  >
+    <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-6 md:p-10">
+      {/* Enhanced Animated Background */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-600/20 via-blue-600/20 to-cyan-500/20 animate-gradient-shift"></div>
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-tl from-purple-500/10 via-transparent to-blue-500/10 animate-pulse-slow"></div>
+        {/* Decorative gradient orbs */}
+        <div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-violet-400/30 to-purple-600/30 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-blue-400/30 to-cyan-500/30 rounded-full blur-3xl animate-float-delayed"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-indigo-400/20 to-purple-500/20 rounded-full blur-3xl animate-spin-slow"></div>
+      </div>
+
+      {/* Glass morphism overlay */}
+      <div className="min-h-screen w-full bg-white/5 backdrop-blur-[1px] supports-backdrop-blur:bg-white/5 supports-no-backdrop-blur:bg-white/90 flex items-center justify-center">
+        <div className="w-full max-w-md relative z-10">
+          <div className="flex flex-col gap-6">
+            {/* Enhanced glassmorphic card */}
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-violet-500/25 to-cyan-500/25 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
+              <Card className="relative bg-white/40 backdrop-blur-2xl border border-white/30 rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-500 hover:bg-white/50 group-hover:border-white/40 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <CardHeader className="relative z-10 text-center pb-8">
+                  {/* Enhanced logo/icon */}
+                  <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-emerald-500/30 group-hover:shadow-emerald-500/50 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 border border-white/20">
+                    <Heart className="w-8 h-8 text-white group-hover:animate-pulse" />
+                  </div>
+                  <CardTitle className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-violet-700 via-blue-700 to-cyan-700 bg-clip-text text-transparent animate-gradient-text">
+                    Join BeyondRounds
+                  </CardTitle>
+                  <CardDescription className="text-gray-600 text-lg mt-3">
+                    Create your account to connect with fellow doctors
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="relative z-10 p-8">
+                  <form onSubmit={handleSignUp}>
+                    <div className="flex flex-col gap-6">
+                      {/* Enhanced Google Sign-up Button */}
+                      <div className="group/btn relative">
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl blur-lg group-hover/btn:blur-xl transition-all duration-300"></div>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="relative w-full bg-white/60 backdrop-blur-sm border-white/30 hover:bg-white/80 hover:border-white/40 transition-all duration-300 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl group-hover/btn:scale-105"
+                          onClick={handleGoogleSignUp}
+                          disabled={isGoogleLoading || isLoading}
+                        >
                     <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                       <path
                         fill="currentColor"
@@ -116,83 +144,125 @@ export default function Page() {
                         d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                       />
                     </svg>
-                    {isGoogleLoading ? "Signing up..." : "Continue with Google"}
-                  </Button>
+                          {isGoogleLoading ? "Signing up..." : "Continue with Google"}
+                        </Button>
+                      </div>
 
-                  <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
-                      <span className="w-full border-t" />
-                    </div>
-                    <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
-                    </div>
-                  </div>
+                      {/* Enhanced Divider */}
+                      <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                          <span className="w-full border-t border-white/30" />
+                        </div>
+                        <div className="relative flex justify-center text-sm uppercase">
+                          <span className="bg-white/40 backdrop-blur-sm px-4 py-2 text-gray-600 font-medium rounded-full border border-white/30">
+                            Or continue with email
+                          </span>
+                        </div>
+                      </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="grid gap-2">
-                      <Label htmlFor="firstName">First Name</Label>
-                      <Input
-                        id="firstName"
-                        type="text"
-                        placeholder="John"
-                        required
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                      />
+                      {/* Enhanced Form Fields */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="grid gap-3">
+                          <Label htmlFor="firstName" className="text-gray-700 font-semibold text-sm">
+                            First Name
+                          </Label>
+                          <Input
+                            id="firstName"
+                            type="text"
+                            placeholder="John"
+                            required
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                            className="bg-white/60 backdrop-blur-sm border-white/30 focus:bg-white/80 focus:border-white/50 transition-all duration-300 py-3 px-4 rounded-xl text-gray-800 placeholder:text-gray-500"
+                          />
+                        </div>
+                        <div className="grid gap-3">
+                          <Label htmlFor="lastName" className="text-gray-700 font-semibold text-sm">
+                            Last Name
+                          </Label>
+                          <Input
+                            id="lastName"
+                            type="text"
+                            placeholder="Smith"
+                            required
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                            className="bg-white/60 backdrop-blur-sm border-white/30 focus:bg-white/80 focus:border-white/50 transition-all duration-300 py-3 px-4 rounded-xl text-gray-800 placeholder:text-gray-500"
+                          />
+                        </div>
+                      </div>
+                      <div className="grid gap-3">
+                        <Label htmlFor="email" className="text-gray-700 font-semibold text-sm">
+                          Email Address
+                        </Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          placeholder="doctor@hospital.com"
+                          required
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className="bg-white/60 backdrop-blur-sm border-white/30 focus:bg-white/80 focus:border-white/50 transition-all duration-300 py-3 px-4 rounded-xl text-gray-800 placeholder:text-gray-500"
+                        />
+                      </div>
+                      <div className="grid gap-3">
+                        <Label htmlFor="password" className="text-gray-700 font-semibold text-sm">
+                          Password
+                        </Label>
+                        <Input
+                          id="password"
+                          type="password"
+                          placeholder="Create a strong password"
+                          required
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="bg-white/60 backdrop-blur-sm border-white/30 focus:bg-white/80 focus:border-white/50 transition-all duration-300 py-3 px-4 rounded-xl text-gray-800 placeholder:text-gray-500"
+                        />
+                      </div>
+                      {/* Enhanced Error Message */}
+                      {error && (
+                        <div className="bg-red-50/80 backdrop-blur-sm border border-red-200/50 rounded-xl p-4">
+                          <p className="text-sm text-red-600 font-medium">{error}</p>
+                        </div>
+                      )}
+
+                      {/* Enhanced Submit Button */}
+                      <div className="group/submit relative">
+                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/30 to-cyan-500/30 rounded-xl blur-lg group-hover/submit:blur-xl transition-all duration-300"></div>
+                        <Button 
+                          type="submit" 
+                          className="relative w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-white py-6 text-lg font-bold shadow-2xl shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all duration-500 hover:scale-105 rounded-xl border border-white/20 group btn-shimmer animate-glow" 
+                          disabled={isLoading || isGoogleLoading}
+                        >
+                          <span className="relative z-10 flex items-center gap-3">
+                            {isLoading ? "Creating account..." : "Create Account"}
+                            {!isLoading && <div className="w-2 h-2 bg-white/90 rounded-full animate-pulse"></div>}
+                          </span>
+                          <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/40 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out"></div>
+                        </Button>
+                      </div>
                     </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="lastName">Last Name</Label>
-                      <Input
-                        id="lastName"
-                        type="text"
-                        placeholder="Smith"
-                        required
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                      />
+
+                    {/* Enhanced Footer Links */}
+                    <div className="mt-8 space-y-4 text-center">
+                      <div className="text-gray-600">
+                        Already have an account?{" "}
+                        <Link href="/auth/login" className="font-semibold text-violet-600 hover:text-violet-700 transition-colors duration-200 hover:underline underline-offset-4">
+                          Sign in
+                        </Link>
+                      </div>
+                      <div className="text-gray-600">
+                        Want the full experience?{" "}
+                        <Link href="/join" className="font-semibold text-emerald-600 hover:text-emerald-700 transition-colors duration-200 hover:underline underline-offset-4">
+                          Join as a doctor
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="m@example.com"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="password">Password</Label>
-                    <Input
-                      id="password"
-                      type="password"
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                  </div>
-                  {error && <p className="text-sm text-red-500">{error}</p>}
-                  <Button type="submit" className="w-full" disabled={isLoading || isGoogleLoading}>
-                    {isLoading ? "Creating account..." : "Sign Up"}
-                  </Button>
-                </div>
-                <div className="mt-4 text-center text-sm">
-                  Already have an account?{" "}
-                  <Link href="/auth/login" className="underline underline-offset-4">
-                    Sign in
-                  </Link>
-                </div>
-                <div className="mt-2 text-center text-sm">
-                  Want the full experience?{" "}
-                  <Link href="/join" className="underline underline-offset-4 text-blue-600">
-                    Join as a doctor
-                  </Link>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
       </div>
     </div>

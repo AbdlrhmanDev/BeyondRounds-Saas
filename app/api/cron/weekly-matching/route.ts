@@ -1,9 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase/server"
-import { MatchingAlgorithm } from "@/lib/matching-algorithm"
+import { createWeeklyMatchingEngine } from "@/lib/weekly-matching-engine"
 
 // ==============================================
-// AUTOMATED MATCHING CRON JOB
+// AUTOMATED MATCHING CRON JOB - PRODUCTION READY
+// Runs every Thursday at 16:00 local time
 // ==============================================
 
 export async function POST(request: NextRequest) {
@@ -22,14 +22,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const supabase = await createClient()
-    const algorithm = new MatchingAlgorithm()
+    console.log("🤖 Starting BeyondRounds Weekly Matching Engine...")
+    console.log(`📅 Execution time: ${new Date().toISOString()}`)
 
-    console.log("🤖 Starting automated weekly matching...")
+    // Create matching engine instance
+    const engine = await createWeeklyMatchingEngine()
 
     // Check if matching has already been run this week
     const currentWeek = new Date().toISOString().split("T")[0]
-    const { data: existingMatches, error: checkError } = await supabase
+    const { data: existingMatches, error: checkError } = await engine.supabase
       .from("matches")
       .select("id")
       .eq("match_week", currentWeek)
@@ -46,68 +47,78 @@ export async function POST(request: NextRequest) {
         success: true,
         message: "Matching already completed for this week",
         groupsCreated: 0,
+        week: currentWeek
       })
     }
 
-    // Run the matching algorithm
-    const groups = await algorithm.createMatches(supabase)
+    // Run the complete 7-step matching process
+    const results = await engine.runWeeklyMatching()
 
-    if (groups.length === 0) {
-      console.log("ℹ️ No matches created this week (insufficient eligible users)")
-      
-      // Log this for admin monitoring
-      await logMatchingResult(supabase, {
-        week: currentWeek,
-        groupsCreated: 0,
-        eligibleUsers: 0,
-        reason: "Insufficient eligible users"
-      })
-
-      return NextResponse.json({
-        success: true,
-        message: "No matches created this week - insufficient eligible users",
-        groupsCreated: 0,
-      })
-    }
-
-    // Save matches to database
-    await algorithm.saveMatches(supabase, groups)
-
-    // Log successful matching
-    await logMatchingResult(supabase, {
+    // Log results for admin monitoring
+    await logMatchingResult(engine.supabase, {
       week: currentWeek,
-      groupsCreated: groups.length,
-      eligibleUsers: groups.reduce((sum, group) => sum + group.members.length, 0),
-      reason: "Success"
+      groupsCreated: results.finalGroups.length,
+      eligibleUsers: results.eligibleUsers.length,
+      validPairs: results.scoredPairings.length,
+      rolloverUsers: results.rolloverCandidates.length,
+      reason: results.finalGroups.length > 0 ? "Success" : "No valid groups formed"
     })
 
-    console.log(`🎉 Successfully created ${groups.length} match groups`)
+    console.log(`🎉 Weekly matching completed successfully!`)
+    console.log(`📊 Final Results:`)
+    console.log(`   • Eligible users: ${results.eligibleUsers.length}`)
+    console.log(`   • Valid pairs: ${results.scoredPairings.length}`)
+    console.log(`   • Groups created: ${results.finalGroups.length}`)
+    console.log(`   • Notifications prepared: ${results.notifications.length}`)
+    console.log(`   • Rollover candidates: ${results.rolloverCandidates.length}`)
 
     return NextResponse.json({
       success: true,
-      message: `Created ${groups.length} match groups`,
-      groupsCreated: groups.length,
-      groups: groups.map((g) => ({
-        groupId: g.groupId,
-        memberCount: g.members.length,
-        averageScore: g.averageScore.toFixed(3),
-        members: g.members.map((m) => ({
-          name: `${m.first_name} ${m.last_name}`,
-          specialty: m.specialty,
-          city: m.city,
+      message: `Weekly matching completed - Created ${results.finalGroups.length} groups`,
+      week: currentWeek,
+      results: {
+        eligibleUsers: results.eligibleUsers.length,
+        validPairs: results.scoredPairings.length,
+        groupsCreated: results.finalGroups.length,
+        notificationsPrepared: results.notifications.length,
+        rolloverCandidates: results.rolloverCandidates.length,
+        groups: results.finalGroups.map((group) => ({
+          groupName: group.groupName,
+          memberCount: group.members.length,
+          averageScore: group.averageScore.toFixed(3),
+          members: group.members.map((member) => ({
+            name: `${member.first_name} ${member.last_name}`,
+            specialty: member.specialty,
+            city: member.city,
+          })),
         })),
-      })),
+        notifications: results.notifications.map((notif) => ({
+          userId: notif.userId,
+          email: notif.email,
+          firstName: notif.firstName,
+          groupName: notif.groupName,
+          groupMemberCount: notif.groupMembers.length
+        })),
+        rolloverUsers: results.rolloverCandidates.map((user) => ({
+          name: `${user.first_name} ${user.last_name}`,
+          specialty: user.specialty,
+          city: user.city,
+        }))
+      }
     })
+
   } catch (error: any) {
-    console.error("❌ Error running automated matching:", error)
+    console.error("❌ Error running weekly matching engine:", error)
     
     // Log error for monitoring
     try {
-      const supabase = await createClient()
-      await logMatchingResult(supabase, {
+      const engine = await createWeeklyMatchingEngine()
+      await logMatchingResult(engine.supabase, {
         week: new Date().toISOString().split("T")[0],
         groupsCreated: 0,
         eligibleUsers: 0,
+        validPairs: 0,
+        rolloverUsers: 0,
         reason: `Error: ${error.message}`
       })
     } catch (logError) {
@@ -116,7 +127,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       {
-        error: "Failed to run matching algorithm",
+        error: "Failed to run weekly matching engine",
         details: error.message,
       },
       { status: 500 }
@@ -135,27 +146,45 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const supabase = await createClient()
-    const algorithm = new MatchingAlgorithm()
+    console.log("🧪 Manual weekly matching test triggered...")
+    
+    // Create matching engine instance
+    const engine = await createWeeklyMatchingEngine()
 
-    console.log("🧪 Manual matching test triggered...")
-
-    const groups = await algorithm.createMatches(supabase)
+    // Run the complete 7-step matching process (without saving to avoid duplicate entries)
+    const results = await engine.runWeeklyMatching()
 
     return NextResponse.json({
       success: true,
-      message: "Manual test completed",
-      groupsCreated: groups.length,
-      groups: groups.map((g) => ({
-        groupId: g.groupId,
-        memberCount: g.members.length,
-        averageScore: g.averageScore.toFixed(3),
-        members: g.members.map((m) => ({
-          name: `${m.first_name} ${m.last_name}`,
-          specialty: m.specialty,
-          city: m.city,
+      message: "Manual test completed - Full 7-step process executed",
+      testResults: {
+        eligibleUsers: results.eligibleUsers.length,
+        validPairs: results.scoredPairings.length,
+        groupsCreated: results.finalGroups.length,
+        notificationsPrepared: results.notifications.length,
+        rolloverCandidates: results.rolloverCandidates.length,
+        groups: results.finalGroups.map((group) => ({
+          groupName: group.groupName,
+          memberCount: group.members.length,
+          averageScore: group.averageScore.toFixed(3),
+          members: group.members.map((member) => ({
+            name: `${member.first_name} ${member.last_name}`,
+            specialty: member.specialty,
+            city: member.city,
+          })),
         })),
-      })),
+        sampleNotifications: results.notifications.slice(0, 3).map((notif) => ({
+          email: notif.email,
+          firstName: notif.firstName,
+          groupName: notif.groupName,
+          groupMemberCount: notif.groupMembers.length
+        })),
+        rolloverUsers: results.rolloverCandidates.map((user) => ({
+          name: `${user.first_name} ${user.last_name}`,
+          specialty: user.specialty,
+          city: user.city,
+        }))
+      }
     })
   } catch (error: any) {
     console.error("Error in manual matching test:", error)
@@ -171,11 +200,17 @@ async function logMatchingResult(supabase: any, result: {
   week: string
   groupsCreated: number
   eligibleUsers: number
+  validPairs?: number
+  rolloverUsers?: number
   reason: string
 }) {
   try {
-    // Create a simple logging table if it doesn't exist
-    await supabase.rpc('create_matching_logs_table_if_not_exists')
+    // Create a simple logging table if it doesn't exist (ignore errors if it already exists)
+    try {
+      await supabase.rpc('create_matching_logs_table_if_not_exists')
+    } catch (rpcError) {
+      // Ignore RPC errors - table likely already exists
+    }
     
     const { error } = await supabase
       .from("matching_logs")
@@ -183,12 +218,30 @@ async function logMatchingResult(supabase: any, result: {
         week: result.week,
         groups_created: result.groupsCreated,
         eligible_users: result.eligibleUsers,
+        valid_pairs: result.validPairs || 0,
+        rollover_users: result.rolloverUsers || 0,
         reason: result.reason,
         created_at: new Date().toISOString()
       })
 
     if (error) {
       console.error("Failed to log matching result:", error)
+      // Try basic insert without extra columns if table schema is different
+      try {
+        await supabase
+          .from("matching_logs")
+          .insert({
+            week: result.week,
+            groups_created: result.groupsCreated,
+            eligible_users: result.eligibleUsers,
+            reason: result.reason,
+            created_at: new Date().toISOString()
+          })
+      } catch (fallbackError) {
+        console.error("Fallback logging also failed:", fallbackError)
+      }
+    } else {
+      console.log(`📝 Logged matching result for week ${result.week}`)
     }
   } catch (error) {
     console.error("Error in logging function:", error)

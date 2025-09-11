@@ -4,6 +4,8 @@ import { GeistMono } from 'geist/font/mono'
 import { Analytics } from '@vercel/analytics/next'
 import '../styles/globals.css'
 import Footer from '@/components/footer'
+import ModernNav from '@/components/modern-nav'
+import { ThemeProvider } from '@/components/theme-provider'
 export const metadata: Metadata = {
   title: "beyondrounds",
   description: 'where doctors become friends',
@@ -16,11 +18,14 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
-        {children}
-        <Analytics />
-        <Footer />
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          <ModernNav />
+          {children}
+          <Analytics />
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   )

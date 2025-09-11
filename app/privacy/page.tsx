@@ -32,11 +32,13 @@ export default function PrivacyPage() {
         <div className="container mx-auto text-center max-w-4xl">
           <Badge className="mb-6 bg-blue-100 text-blue-700 hover:bg-blue-100">Legal</Badge>
           <h1 className="text-4xl font-bold text-gray-900 mb-6 text-balance">Privacy Policy</h1>
-          <p className="text-xl text-gray-600 mb-8 text-pretty max-w-3xl mx-auto">
-            Your privacy and data security are fundamental to our mission. This policy explains how we collect, use, and
-            protect your information.
-          </p>
-          <p className="text-sm text-gray-500">Last updated: January 2024</p>
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Your Privacy Matters</h2>
+            <p className="text-xl text-gray-600 text-pretty max-w-3xl mx-auto">
+              At BeyondRounds, we're committed to protecting your privacy and handling your data responsibly. This policy explains what information we collect and how we use it.
+            </p>
+          </div>
+          <p className="text-sm text-gray-500">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
         </div>
       </section>
 
@@ -53,25 +55,36 @@ export default function PrivacyPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Personal Information</h4>
-                  <p className="text-gray-600 text-sm">
-                    We collect information you provide directly, including your name, email address, medical specialty,
-                    location, professional interests, and availability preferences.
-                  </p>
+                  <h4 className="font-semibold text-gray-900 mb-2">Account Information:</h4>
+                  <ul className="text-gray-600 text-sm space-y-1 ml-4 list-disc">
+                    <li>Name, age, gender, city</li>
+                    <li>Medical specialty and career stage</li>
+                    <li>Contact information (email, phone)</li>
+                  </ul>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Verification Documents</h4>
-                  <p className="text-gray-600 text-sm">
-                    For verification purposes, we temporarily collect copies of your medical license, government-issued
-                    ID, and verification photos. These documents are automatically deleted after 90 days.
-                  </p>
+                  <h4 className="font-semibold text-gray-900 mb-2">Verification Data:</h4>
+                  <ul className="text-gray-600 text-sm space-y-1 ml-4 list-disc">
+                    <li>Medical license/ID photos</li>
+                    <li>Selfie for identity confirmation</li>
+                    <li>Professional credentials</li>
+                  </ul>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Usage Information</h4>
-                  <p className="text-gray-600 text-sm">
-                    We collect information about how you use our platform, including chat messages, match interactions,
-                    and platform engagement metrics to improve our matching algorithm.
-                  </p>
+                  <h4 className="font-semibold text-gray-900 mb-2">Matching Information:</h4>
+                  <ul className="text-gray-600 text-sm space-y-1 ml-4 list-disc">
+                    <li>Interests, hobbies, and preferences</li>
+                    <li>Availability and meeting preferences</li>
+                    <li>Feedback about matches and meetups</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-2">Usage Data:</h4>
+                  <ul className="text-gray-600 text-sm space-y-1 ml-4 list-disc">
+                    <li>App usage patterns</li>
+                    <li>Communication within groups</li>
+                    <li>Device and location information</li>
+                  </ul>
                 </div>
               </CardContent>
             </Card>
@@ -84,27 +97,14 @@ export default function PrivacyPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Matching & Platform Services</h4>
-                  <p className="text-gray-600 text-sm">
-                    We use your information to create compatible matches, facilitate group conversations, and provide
-                    personalized platform experiences.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Verification & Safety</h4>
-                  <p className="text-gray-600 text-sm">
-                    Your verification documents are used solely to confirm your medical credentials and ensure platform
-                    safety. We never share these documents with other users.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Communication</h4>
-                  <p className="text-gray-600 text-sm">
-                    We use your contact information to send important platform updates, match notifications, and respond
-                    to your support requests.
-                  </p>
-                </div>
+                <ul className="text-gray-600 text-sm space-y-1 ml-4 list-disc">
+                  <li>Create compatible matches with other doctors</li>
+                  <li>Facilitate group communications</li>
+                  <li>Verify medical credentials</li>
+                  <li>Improve our matching algorithm</li>
+                  <li>Send service notifications and updates</li>
+                  <li>Ensure platform safety and security</li>
+                </ul>
               </CardContent>
             </Card>
 
@@ -116,27 +116,13 @@ export default function PrivacyPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">With Other Users</h4>
-                  <p className="text-gray-600 text-sm">
-                    Only your matched group members can see your profile information (name, specialty, interests). Your
-                    verification documents and contact information are never shared with other users.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">With Third Parties</h4>
-                  <p className="text-gray-600 text-sm">
-                    We do not sell, rent, or share your personal information with third parties for marketing purposes.
-                    We only share information when required by law or to protect platform safety.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Service Providers</h4>
-                  <p className="text-gray-600 text-sm">
-                    We work with trusted service providers (hosting, payment processing, analytics) who are bound by
-                    strict confidentiality agreements and data protection standards.
-                  </p>
-                </div>
+                <p className="text-gray-600 text-sm mb-4">We never sell your personal information. We only share data:</p>
+                <ul className="text-gray-600 text-sm space-y-1 ml-4 list-disc">
+                  <li>With matched group members (limited profile info only)</li>
+                  <li>With service providers (payment processing, hosting)</li>
+                  <li>When required by law</li>
+                  <li>With your explicit consent</li>
+                </ul>
               </CardContent>
             </Card>
 
@@ -144,31 +130,16 @@ export default function PrivacyPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Lock className="w-5 h-5 text-red-600" />
-                  Data Security & Storage
+                  Data Security
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Security Measures</h4>
-                  <p className="text-gray-600 text-sm">
-                    We use enterprise-grade security including end-to-end encryption, secure data transmission, regular
-                    security audits, and access controls to protect your information.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Data Location</h4>
-                  <p className="text-gray-600 text-sm">
-                    All data is stored on secure servers within the European Union, ensuring compliance with GDPR and
-                    providing additional privacy protections for our users.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Data Retention</h4>
-                  <p className="text-gray-600 text-sm">
-                    Verification documents are automatically deleted after 90 days. Other personal information is
-                    retained while your account is active and for a reasonable period after account closure.
-                  </p>
-                </div>
+                <ul className="text-gray-600 text-sm space-y-1 ml-4 list-disc">
+                  <li>All data encrypted in transit and at rest</li>
+                  <li>Servers hosted in GDPR-compliant EU facilities</li>
+                  <li>Regular security audits and monitoring</li>
+                  <li>Verification photos deleted after 90 days</li>
+                </ul>
               </CardContent>
             </Card>
 
@@ -176,53 +147,59 @@ export default function PrivacyPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Shield className="w-5 h-5 text-orange-600" />
-                  Your Rights & Choices
+                  Your Rights (GDPR)
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Access & Control</h4>
-                  <p className="text-gray-600 text-sm">
-                    You can access, update, or delete your personal information through your account dashboard. You also
-                    have the right to download your data or request account deletion.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Communication Preferences</h4>
-                  <p className="text-gray-600 text-sm">
-                    You can control email notifications and communication preferences in your account settings.
-                    Essential platform communications cannot be disabled.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">GDPR Rights</h4>
-                  <p className="text-gray-600 text-sm">
-                    As a EU-based service, you have additional rights under GDPR including data portability,
-                    rectification, and the right to be forgotten. Contact us to exercise these rights.
-                  </p>
-                </div>
+                <ul className="text-gray-600 text-sm space-y-1 ml-4 list-disc">
+                  <li>Access your personal data</li>
+                  <li>Correct inaccurate information</li>
+                  <li>Delete your account and data</li>
+                  <li>Export your data</li>
+                  <li>Withdraw consent for processing</li>
+                </ul>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Contact Information</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <Database className="w-5 h-5 text-blue-600" />
+                  Data Retention
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <ul className="text-gray-600 text-sm space-y-1 ml-4 list-disc">
+                  <li>Active accounts: data retained while active</li>
+                  <li>Cancelled accounts: data deleted within 30 days</li>
+                  <li>Verification photos: deleted after 90 days</li>
+                  <li>Anonymous usage analytics: retained for improvement</li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Eye className="w-5 h-5 text-green-600" />
+                  Cookies & Tracking
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-gray-600 text-sm">
+                  We use essential cookies for functionality and analytics cookies to improve our service. You can control cookie preferences in your browser.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Contact Us</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-gray-600 text-sm mb-4">
-                  If you have questions about this Privacy Policy or our data practices, please contact us:
+                  Questions about privacy? Email us at <strong>privacy@beyondrounds.com</strong> or write to: BeyondRounds Privacy Team [Address] [City, Country]
                 </p>
-                <div className="space-y-2 text-sm">
-                  <p>
-                    <strong>Email:</strong> privacy@beyondrounds.com
-                  </p>
-                  <p>
-                    <strong>Address:</strong> BeyondRounds Ltd., 123 Medical District, London, UK EC1A 1BB
-                  </p>
-                  <p>
-                    <strong>Data Protection Officer:</strong> dpo@beyondrounds.com
-                  </p>
-                </div>
               </CardContent>
             </Card>
           </div>

@@ -3,152 +3,34 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Label } from "@/components/ui/label"
 import { 
-  Heart, 
+  Settings,
   User, 
-  Stethoscope, 
-  MapPin, 
-  Users, 
-  Calendar, 
-  FileText, 
   CreditCard, 
   CheckCircle, 
   AlertCircle,
-  ArrowLeft,
-  ArrowRight,
-  Settings
+  ArrowLeft
 } from "lucide-react"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
-
-type Gender = 'male' | 'female'
-
-interface ProfileData {
-  firstName: string
-  lastName: string
-  specialty: string
-  city: string
-  gender: Gender | ''              // اختياري حتى يختار
-  genderPreference: Gender | ''    // اختياري حتى يختار
-  interests: string[]
-  availabilitySlots: string[]
-  bio: string
-}
-
-interface PaymentData {
-  paymentMethod: 'credit_card' | 'paypal' | ''
-  cardNumber: string
-  expiryDate: string
-  cvv: string
-  paypalEmail: string
-}
-
-const SPECIALTIES = [
-  "General Practice",
-  "Internal Medicine", 
-  "Cardiology",
-  "Dermatology",
-  "Emergency Medicine",
-  "Family Medicine",
-  "Gastroenterology",
-  "Neurology",
-  "Oncology",
-  "Pediatrics",
-  "Psychiatry",
-  "Radiology",
-  "Surgery",
-  "Therapist",
-  "Coach",
-  "Nutritionist",
-  "Other"
-]
-
-const INTERESTS = [
-  "Research",
-  "Clinical Trials", 
-  "Medical Education",
-  "Public Health",
-  "Healthcare Technology",
-  "Medical Writing",
-  "Telemedicine",
-  "Healthcare Administration",
-  "Medical Ethics",
-  "Global Health",
-  "Sports Medicine",
-  "Preventive Care",
-  "Mental Health",
-  "Geriatrics",
-  "Pediatric Care"
-]
-
-const TIME_SLOTS = [
-  "Monday 9:00-12:00",
-  "Monday 13:00-17:00", 
-  "Monday 18:00-21:00",
-  "Tuesday 9:00-12:00",
-  "Tuesday 13:00-17:00",
-  "Tuesday 18:00-21:00", 
-  "Wednesday 9:00-12:00",
-  "Wednesday 13:00-17:00",
-  "Wednesday 18:00-21:00",
-  "Thursday 9:00-12:00", 
-  "Thursday 13:00-17:00",
-  "Thursday 18:00-21:00",
-  "Friday 9:00-12:00",
-  "Friday 13:00-17:00",
-  "Friday 18:00-21:00",
-  "Saturday 9:00-12:00",
-  "Saturday 13:00-17:00",
-  "Sunday 9:00-12:00",
-  "Sunday 13:00-17:00"
-]
+import ComprehensiveProfileForm from "@/components/comprehensive-profile-form"
+import { ProfileFormData, UserProfile } from "@/lib/types/profile"
 
 export default function SettingsPage() {
-  const [step, setStep] = useState(1)
   const [user, setUser] = useState<any>(null)
-  const [currentProfile, setCurrentProfile] = useState<any>(null)
+  const [profile, setProfile] = useState<UserProfile | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
   const router = useRouter()
-
-  const [profileData, setProfileData] = useState<ProfileData>({
-    firstName: '',
-    lastName: '',
-    specialty: '',
-    city: '',
-    gender: '',
-    genderPreference: '',
-    interests: [],
-    availabilitySlots: [],
-    bio: ''
-  })
-
-  const [paymentData, setPaymentData] = useState<PaymentData>({
-    paymentMethod: '',
-    cardNumber: '',
-    expiryDate: '',
-    cvv: '',
-    paypalEmail: ''
-  })
-
   const supabase = createClient()
-
-  const onlyMF = (v: any) => (v === 'male' || v === 'female') ? v : ''
-  const allowed: Gender[] = ['male', 'female']
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -172,19 +54,7 @@ export default function SettingsPage() {
           console.error("Error loading profile:", profileError)
           toast.error("Failed to load profile data")
         } else {
-          setCurrentProfile(profileData)
-          // Pre-populate form with existing data
-          setProfileData({
-            firstName: profileData.first_name || '',
-            lastName: profileData.last_name || '',
-            specialty: profileData.specialty || '',
-            city: profileData.city || '',
-            gender: onlyMF(profileData.gender),
-            genderPreference: onlyMF(profileData.gender_preference),
-            interests: Array.isArray(profileData.interests) ? profileData.interests : [],
-            availabilitySlots: Array.isArray(profileData.availability_slots) ? profileData.availability_slots : [],
-            bio: profileData.bio || ''
-          })
+          setProfile(profileData)
         }
 
         setIsLoading(false)
@@ -198,713 +68,428 @@ export default function SettingsPage() {
     loadUserData()
   }, [router, supabase])
 
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return emailRegex.test(email)
-  }
+  const handleProfileSubmit = async (formData: ProfileFormData) => {
+    if (!user || !profile) return
 
-  const validateCardNumber = (cardNumber: string) => {
-    const cleaned = cardNumber.replace(/\s/g, '')
-    return cleaned.length === 16 && /^\d+$/.test(cleaned)
-  }
-
-  const validateExpiryDate = (expiryDate: string) => {
-    const regex = /^(0[1-9]|1[0-2])\/\d{2}$/
-    if (!regex.test(expiryDate)) return false
-    
-    const [month, year] = expiryDate.split('/')
-    const currentDate = new Date()
-    const currentYear = currentDate.getFullYear() % 100
-    const currentMonth = currentDate.getMonth() + 1
-    
-    const expYear = parseInt(year)
-    const expMonth = parseInt(month)
-    
-    if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) {
-      return false
-    }
-    
-    return true
-  }
-
-  const validateCVV = (cvv: string) => {
-    return cvv.length === 3 && /^\d+$/.test(cvv)
-  }
-
-  const handleInterestToggle = (interest: string) => {
-    setProfileData(prev => ({
-      ...prev,
-      interests: prev.interests.includes(interest)
-        ? prev.interests.filter(i => i !== interest)
-        : [...prev.interests, interest]
-    }))
-  }
-
-  const handleAvailabilityToggle = (slot: string) => {
-    setProfileData(prev => ({
-      ...prev,
-      availabilitySlots: prev.availabilitySlots.includes(slot)
-        ? prev.availabilitySlots.filter(s => s !== slot)
-        : [...prev.availabilitySlots, slot]
-    }))
-  }
-
-  const canProceedToStep2 =
-    profileData.firstName && profileData.lastName &&
-    profileData.specialty && profileData.city && profileData.gender
-
-  const canProceedToStep3 =
-    (profileData.genderPreference === 'male' || profileData.genderPreference === 'female') &&
-    profileData.interests.length > 0
-  const canProceedToStep4 = profileData.availabilitySlots.length > 0
-  const canProceedToStep5 = profileData.bio.length > 0 && profileData.bio.length <= 500
-
-  const validatePayment = () => {
-    if (paymentData.paymentMethod === 'credit_card') {
-      return validateCardNumber(paymentData.cardNumber) && 
-             validateExpiryDate(paymentData.expiryDate) && 
-             validateCVV(paymentData.cvv)
-    } else if (paymentData.paymentMethod === 'paypal') {
-      return validateEmail(paymentData.paypalEmail)
-    }
-    return false
-  }
-
-  const handleSaveProfile = async () => {
     setIsSaving(true)
-    setError(null)
-
-    // Validate required fields
-    if (!profileData.firstName.trim() || !profileData.lastName.trim()) {
-      setIsSaving(false)
-      setError('First name and last name are required.')
-      toast.error('First name and last name are required.')
-      return
-    }
-
-    if (!profileData.specialty.trim()) {
-      setIsSaving(false)
-      setError('Specialty is required.')
-      toast.error('Specialty is required.')
-      return
-    }
-
-    if (!profileData.city.trim()) {
-      setIsSaving(false)
-      setError('City is required.')
-      toast.error('City is required.')
-      return
-    }
-
-    // Validate gender fields only if they are provided
-    const g = profileData.gender ? String(profileData.gender).trim().toLowerCase() : null
-    const gp = profileData.genderPreference ? String(profileData.genderPreference).trim().toLowerCase() : null
-
-    if (g && !allowed.includes(g as Gender)) {
-      setIsSaving(false)
-      setError('Gender must be either "male" or "female".')
-      toast.error('Gender must be either "male" or "female".')
-      return
-    }
-
-    if (gp && !allowed.includes(gp as Gender)) {
-      setIsSaving(false)
-      setError('Gender preference must be either "male" or "female".')
-      toast.error('Gender preference must be either "male" or "female".')
-      return
-    }
-
     try {
-      const updateData: any = {
-        first_name: profileData.firstName.trim(),
-        last_name: profileData.lastName.trim(),
-        specialty: profileData.specialty.trim(),
-        city: profileData.city.trim(),
-        bio: profileData.bio.trim(),
+      // Transform form data to profile update format
+      const profileUpdate = {
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        age: formData.age,
+        nationality: formData.nationality,
+        gender: formData.gender,
+        gender_preference: formData.genderPreference,
+        city: formData.city,
+        specialty: formData.specialty || formData.medicalSpecialty[0] || '', // Legacy field
+        medical_specialty: formData.medicalSpecialty,
+        specialty_preference: formData.specialtyPreference,
+        career_stage: formData.careerStage,
+        sports_activities: formData.sportsActivities,
+        activity_level: formData.activityLevel,
+        music_preferences: formData.musicPreferences,
+        movie_tv_preferences: formData.movieTvPreferences,
+        other_interests: formData.otherInterests,
+        preferred_activities: formData.preferredActivities,
+        social_energy_level: formData.socialEnergyLevel,
+        conversation_style: formData.conversationStyle,
+        availability_slots: formData.availabilitySlots,
+        meeting_frequency: formData.meetingFrequency,
+        dietary_restrictions: formData.dietaryRestrictions,
+        life_stage: formData.lifeStage,
+        looking_for: formData.lookingFor,
+        ideal_weekend: formData.idealWeekend,
+        interests: formData.interests, // Legacy field
         updated_at: new Date().toISOString()
       }
 
-      // Only include gender fields if they are provided
-      if (g) updateData.gender = g
-      if (gp) updateData.gender_preference = gp
-      
-      // Include arrays only if they have content
-      if (profileData.interests.length > 0) {
-        updateData.interests = profileData.interests
+      const { error } = await supabase
+        .from("profiles")
+        .update(profileUpdate)
+        .eq("id", user.id)
+
+      if (error) {
+        console.error("Error updating profile:", error)
+        toast.error("Failed to update profile")
+        return
       }
-      if (profileData.availabilitySlots.length > 0) {
-        updateData.availability_slots = profileData.availabilitySlots
+
+      // Fetch updated profile to get the new completion percentage
+      const { data: updatedProfileData, error: fetchError } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single()
+
+      if (fetchError) {
+        console.error("Error fetching updated profile:", fetchError)
+        // Fall back to local update
+        setProfile({ ...profile, ...profileUpdate } as UserProfile)
+      } else {
+        // Use the fresh data from database (includes updated completion percentage)
+        setProfile(updatedProfileData)
       }
 
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .update(updateData)
-        .eq('id', user.id)
-
-      if (profileError) throw profileError
-
-      // Update current profile state
-      setCurrentProfile((prev: any) => ({ ...prev, ...updateData }))
+      toast.success("Profile updated successfully!")
       
-      setSuccess(true)
-      toast.success('Profile updated successfully!')
+      // Check if profile is now complete (80% or more) using fresh data
+      const finalProfile = updatedProfileData || { ...profile, ...profileUpdate }
+      if (finalProfile.profile_completion_percentage >= 80) {
+        // Show success message with next steps
+        setTimeout(() => {
+          toast.success("🎉 Profile complete! You're now ready for matching.", {
+            duration: 5000,
+            description: "You'll receive weekly matches every Thursday at 4 PM."
+          })
+        }, 1000)
+      }
       
-      // Redirect to dashboard after success
-      setTimeout(() => {
-        router.push("/dashboard")
-      }, 2000)
-
-    } catch (e: any) {
-      console.error('Profile update error:', e)
-      const errorMessage = e.message || 'Failed to save profile'
-      setError(errorMessage)
-      toast.error(errorMessage)
+    } catch (error) {
+      console.error("Error updating profile:", error)
+      toast.error("Failed to update profile")
     } finally {
       setIsSaving(false)
     }
   }
 
-  const getProgressPercentage = () => {
-    switch(step) {
-      case 1: return 25
-      case 2: return 50
-      case 3: return 75
-      case 4: return 90
-      case 5: return 100
-      default: return 0
+  const convertProfileToFormData = (profile: UserProfile): Partial<ProfileFormData> => {
+    return {
+      firstName: profile.first_name,
+      lastName: profile.last_name,
+      age: profile.age,
+      nationality: profile.nationality,
+      gender: profile.gender,
+      genderPreference: profile.gender_preference,
+      city: profile.city,
+      specialty: profile.specialty,
+      medicalSpecialty: profile.medical_specialty || [],
+      specialtyPreference: profile.specialty_preference,
+      careerStage: profile.career_stage,
+      sportsActivities: profile.sports_activities || {},
+      activityLevel: profile.activity_level,
+      musicPreferences: profile.music_preferences || [],
+      movieTvPreferences: profile.movie_tv_preferences || [],
+      otherInterests: profile.other_interests || [],
+      preferredActivities: profile.preferred_activities || [],
+      socialEnergyLevel: profile.social_energy_level,
+      conversationStyle: profile.conversation_style,
+      availabilitySlots: profile.availability_slots || [],
+      meetingFrequency: profile.meeting_frequency,
+      dietaryRestrictions: profile.dietary_restrictions || [],
+      lifeStage: profile.life_stage,
+      lookingFor: profile.looking_for || [],
+      idealWeekend: profile.ideal_weekend,
+      interests: profile.interests || []
     }
   }
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="backdrop-blur-xl bg-white/80 border border-gray-200 rounded-2xl p-8 shadow-lg">
-          <div className="text-center">
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-purple-400 rounded-xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-              <Heart className="w-6 h-6 text-white animate-pulse" />
-            </div>
-            <p className="text-gray-700 text-lg font-medium">Loading settings...</p>
-          </div>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading your settings...</p>
         </div>
       </div>
     )
   }
 
-  if (success) {
+  if (!profile) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <div className="backdrop-blur-xl bg-white/80 border border-gray-200 rounded-2xl p-8 shadow-lg w-full max-w-md text-center">
-          <div className="w-20 h-20 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg animate-bounce">
-            <CheckCircle className="w-10 h-10 text-white" />
-          </div>
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent mb-4">Profile Complete!</h2>
-          <p className="text-gray-700 mb-6">Your profile and payment information have been saved successfully</p>
-          <p className="text-sm text-gray-600 mb-6">
-            Your profile is now complete and you're ready to start receiving weekly matches with fellow medical professionals.
-          </p>
-          <Button 
-            onClick={() => router.push("/dashboard")} 
-            className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-          >
-            Go to Dashboard
-          </Button>
-        </div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <AlertCircle className="h-5 w-5 text-red-500" />
+              Profile Not Found
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 mb-4">
+              We couldn't load your profile data. Please try again or contact support.
+            </p>
+            <Button onClick={() => window.location.reload()} className="w-full">
+              Retry
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="container mx-auto max-w-4xl">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <Link href="/dashboard" className="inline-flex items-center gap-3 mb-6 group">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-400 to-purple-400 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-              <Heart className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent group-hover:from-blue-600 group-hover:to-purple-600 transition-all duration-300">BeyondRounds</span>
-          </Link>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-800 via-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">Complete Your Profile</h1>
-          <p className="text-gray-600 text-lg">Let's set up your profile and payment information to get started</p>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="backdrop-blur-xl bg-white/80 border border-gray-200 rounded-2xl p-6 mb-6 shadow-lg">
-          <div className="space-y-3">
-            <div className="flex justify-between text-sm text-gray-700">
-              <span className="font-medium">Step {step} of 5</span>
-              <span className="font-medium">{getProgressPercentage()}% complete</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-              <div 
-                className="h-full bg-gradient-to-r from-blue-400 to-purple-400 rounded-full transition-all duration-500 ease-out shadow-lg"
-                style={{ width: `${getProgressPercentage()}%` }}
-              ></div>
-            </div>
-          </div>
-        </div>
-
-        {/* Step 1: Basic Information */}
-        {step === 1 && (
-          <div className="backdrop-blur-xl bg-white/80 border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
-            <div className="p-6 border-b border-gray-200">
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-blue-600 bg-clip-text text-transparent flex items-center gap-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-purple-400 rounded-lg flex items-center justify-center">
-                  <User className="w-5 h-5 text-white" />
-                </div>
-                Basic Information
-              </h2>
-              <p className="text-gray-600 mt-2">
-                Let's start with your basic information. Your email ({user?.email}) is already on file.
-              </p>
-            </div>
-            <div className="p-6 space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-3">
-                  <Label htmlFor="firstName" className="text-gray-700 font-medium">First Name *</Label>
-                  <Input
-                    id="firstName"
-                    value={profileData.firstName}
-                    onChange={(e) => setProfileData(prev => ({ ...prev, firstName: e.target.value }))}
-                    placeholder="Enter your first name"
-                    className="backdrop-blur-sm bg-white/60 border-gray-300 text-gray-800 placeholder:text-gray-500 focus:bg-white focus:border-blue-400 transition-all duration-300"
-                  />
-                </div>
-                <div className="space-y-3">
-                  <Label htmlFor="lastName" className="text-gray-700 font-medium">Last Name *</Label>
-                  <Input
-                    id="lastName"
-                    value={profileData.lastName}
-                    onChange={(e) => setProfileData(prev => ({ ...prev, lastName: e.target.value }))}
-                    placeholder="Enter your last name"
-                    className="backdrop-blur-sm bg-white/60 border-gray-300 text-gray-800 placeholder:text-gray-500 focus:bg-white focus:border-blue-400 transition-all duration-300"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <Label htmlFor="specialty" className="text-gray-700 font-medium">Specialty *</Label>
-                <Select value={profileData.specialty} onValueChange={(value) => setProfileData(prev => ({ ...prev, specialty: value }))}>
-                  <SelectTrigger className="backdrop-blur-sm bg-white/60 border-gray-300 text-gray-800 focus:bg-white focus:border-blue-400 transition-all duration-300">
-                    <SelectValue placeholder="Select your specialty" className="text-gray-800" />
-                  </SelectTrigger>
-                  <SelectContent className="backdrop-blur-xl bg-white/90 border-gray-200">
-                    {SPECIALTIES.map((specialty) => (
-                      <SelectItem key={specialty} value={specialty} className="text-gray-800 hover:bg-gray-100">
-                        {specialty}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-3">
-                <Label htmlFor="city" className="text-gray-700 font-medium">City *</Label>
-                <Input
-                  id="city"
-                  value={profileData.city}
-                  onChange={(e) => setProfileData(prev => ({ ...prev, city: e.target.value }))}
-                  placeholder="Enter your city"
-                  className="backdrop-blur-sm bg-white/60 border-gray-300 text-gray-800 placeholder:text-gray-500 focus:bg-white focus:border-blue-400 transition-all duration-300"
-                />
-              </div>
-
-              <div className="space-y-3">
-                <Label className="text-gray-700 font-medium">Gender *</Label>
-                <RadioGroup
-                  value={profileData.gender}
-                  onValueChange={(value) =>
-                    setProfileData(p => ({ ...p, gender: value as Gender }))
-                  }
-                  className="flex gap-6"
-                >
-                  <div className="flex items-center space-x-3">
-                    <RadioGroupItem value="male" id="male" className="border-gray-400 text-blue-500" />
-                    <Label htmlFor="male" className="text-gray-700 cursor-pointer">Male</Label>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <RadioGroupItem value="female" id="female" className="border-gray-400 text-blue-500" />
-                    <Label htmlFor="female" className="text-gray-700 cursor-pointer">Female</Label>
-                  </div>
-                </RadioGroup>
-              </div>
-
-              <div className="flex justify-between pt-6">
-                <Button 
-                  variant="outline" 
-                  onClick={() => router.push('/dashboard')}
-                  className="backdrop-blur-sm bg-white/60 border-gray-300 text-gray-700 hover:bg-white hover:border-gray-400 transition-all duration-300"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b">
+        <div className="max-w-6xl mx-auto px-4 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link href="/dashboard">
+                <Button variant="ghost" size="sm">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
                   Back to Dashboard
                 </Button>
-                <Button 
-                  onClick={() => setStep(2)} 
-                  disabled={!canProceedToStep2}
-                  className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold px-6 py-2 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                >
-                  Next Step
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
+              </Link>
+              <div>
+                <h1 className="text-2xl font-bold flex items-center gap-2">
+                  <Settings className="h-6 w-6" />
+                  Settings
+                </h1>
+                <p className="text-gray-600">Manage your profile and preferences</p>
               </div>
             </div>
-          </div>
-        )}
-
-        {/* Step 2: Preferences */}
-        {step === 2 && (
-          <div className="backdrop-blur-xl bg-white/80 border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
-            <div className="p-6 border-b border-gray-200">
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-blue-600 bg-clip-text text-transparent flex items-center gap-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-purple-400 rounded-lg flex items-center justify-center">
-                  <Users className="w-5 h-5 text-white" />
-                </div>
-                Preferences & Interests
-              </h2>
-              <p className="text-gray-600 mt-2">
-                Tell us about your preferences and professional interests
-              </p>
-            </div>
-            <div className="p-6 space-y-8">
-              <div className="space-y-4">
-                <Label className="text-gray-700 font-medium">Gender Preference *</Label>
-                <p className="text-sm text-gray-600">Who would you prefer to be matched with?</p>
-                <RadioGroup
-                  value={profileData.genderPreference}
-                  onValueChange={(value) =>
-                    setProfileData(p => ({ ...p, genderPreference: value as Gender }))
-                  }
-                  className="flex gap-6"
-                >
-                  <div className="flex items-center space-x-3">
-                    <RadioGroupItem value="male" id="pref-male" className="border-gray-400 text-blue-500" />
-                    <Label htmlFor="pref-male" className="text-gray-700 cursor-pointer">Male professionals</Label>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <RadioGroupItem value="female" id="pref-female" className="border-gray-400 text-blue-500" />
-                    <Label htmlFor="pref-female" className="text-gray-700 cursor-pointer">Female professionals</Label>
-                  </div>
-                </RadioGroup>
-              </div>
-
-              <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
-
-              <div className="space-y-4">
-                <Label className="text-gray-700 font-medium">Professional Interests * (Select at least 1)</Label>
-                <p className="text-sm text-gray-600">Choose areas that interest you professionally</p>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-h-64 overflow-y-auto backdrop-blur-sm bg-gray-50 rounded-xl p-4">
-                  {INTERESTS.map((interest) => (
-                    <div key={interest} className="flex items-center space-x-3 group">
-                      <Checkbox
-                        id={interest}
-                        checked={profileData.interests.includes(interest)}
-                        onCheckedChange={() => handleInterestToggle(interest)}
-                        className="border-gray-400 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
-                      />
-                      <Label htmlFor={interest} className="text-sm text-gray-700 cursor-pointer group-hover:text-gray-900 transition-colors duration-200">{interest}</Label>
-                    </div>
-                  ))}
-                </div>
-                {profileData.interests.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {profileData.interests.map((interest) => (
-                      <Badge key={interest} className="bg-gradient-to-r from-blue-100 to-purple-100 text-gray-700 border-gray-200 backdrop-blur-sm">
-                        {interest}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div className="flex justify-between pt-6">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setStep(1)}
-                  className="backdrop-blur-sm bg-white/60 border-gray-300 text-gray-700 hover:bg-white hover:border-gray-400 transition-all duration-300"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Previous
-                </Button>
-                <Button 
-                  onClick={() => setStep(3)} 
-                  disabled={!canProceedToStep3}
-                  className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold px-6 py-2 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                >
-                  Next Step
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Step 3: Availability */}
-        {step === 3 && (
-          <div className="backdrop-blur-xl bg-white/80 border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
-            <div className="p-6 border-b border-gray-200">
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-blue-600 bg-clip-text text-transparent flex items-center gap-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-purple-400 rounded-lg flex items-center justify-center">
-                  <Calendar className="w-5 h-5 text-white" />
-                </div>
-                Availability Schedule
-              </h2>
-              <p className="text-gray-600 mt-2">
-                Select your preferred time slots for networking sessions (Select at least 1)
-              </p>
-            </div>
-            <div className="p-6 space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto backdrop-blur-sm bg-gray-50 rounded-xl p-4">
-                {TIME_SLOTS.map((slot) => (
-                  <div key={slot} className="flex items-center space-x-3 group">
-                    <Checkbox
-                      id={slot}
-                      checked={profileData.availabilitySlots.includes(slot)}
-                      onCheckedChange={() => handleAvailabilityToggle(slot)}
-                      className="border-gray-400 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
-                    />
-                    <Label htmlFor={slot} className="text-sm text-gray-700 cursor-pointer group-hover:text-gray-900 transition-colors duration-200">{slot}</Label>
-                  </div>
-                ))}
-              </div>
-              
-              {profileData.availabilitySlots.length > 0 && (
-                <div className="space-y-3">
-                  <Label className="text-sm font-medium text-gray-700">Selected slots:</Label>
-                  <div className="flex flex-wrap gap-2">
-                    {profileData.availabilitySlots.map((slot) => (
-                      <Badge key={slot} className="bg-gradient-to-r from-blue-100 to-purple-100 text-gray-700 border-gray-200 backdrop-blur-sm">
-                        {slot}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <div className="flex justify-between pt-6">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setStep(2)}
-                  className="backdrop-blur-sm bg-white/60 border-gray-300 text-gray-700 hover:bg-white hover:border-gray-400 transition-all duration-300"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Previous
-                </Button>
-                <Button 
-                  onClick={() => setStep(4)} 
-                  disabled={!canProceedToStep4}
-                  className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold px-6 py-2 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                >
-                  Next Step
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Step 4: Bio */}
-        {step === 4 && (
-          <div className="backdrop-blur-xl bg-white/80 border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
-            <div className="p-6 border-b border-gray-200">
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-blue-600 bg-clip-text text-transparent flex items-center gap-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-purple-400 rounded-lg flex items-center justify-center">
-                  <FileText className="w-5 h-5 text-white" />
-                </div>
-                Short Bio
-              </h2>
-              <p className="text-gray-600 mt-2">
-                Write a brief bio about yourself (maximum 500 characters)
-              </p>
-            </div>
-            <div className="p-6 space-y-6">
-              <div className="space-y-3">
-                <Label htmlFor="bio" className="text-gray-700 font-medium">Bio *</Label>
-                <Textarea
-                  id="bio"
-                  value={profileData.bio}
-                  onChange={(e) => setProfileData(prev => ({ ...prev, bio: e.target.value }))}
-                  placeholder="Tell other medical professionals about yourself, your interests, and what you hope to gain from networking..."
-                  className="min-h-32 backdrop-blur-sm bg-white/60 border-gray-300 text-gray-800 placeholder:text-gray-500 focus:bg-white focus:border-blue-400 transition-all duration-300 resize-none"
-                  maxLength={500}
-                />
-                <div className="text-right text-sm text-gray-600">
-                  <span className={profileData.bio.length > 450 ? "text-yellow-600" : profileData.bio.length > 480 ? "text-red-600" : ""}>
-                    {profileData.bio.length}/500 characters
+            
+            {/* Profile Status */}
+            <div className="flex items-center gap-4">
+              <div className="text-right">
+                <div className="flex items-center gap-2">
+                  {profile.profile_completion_percentage >= 80 ? (
+                    <CheckCircle className="h-4 w-4 text-green-500" />
+                  ) : (
+                    <AlertCircle className="h-4 w-4 text-orange-500" />
+                  )}
+                  <span className="text-sm font-medium">
+                    Profile {profile.profile_completion_percentage}% Complete
                   </span>
                 </div>
+                <Progress value={profile.profile_completion_percentage} className="w-32 h-2 mt-1" />
               </div>
-
-              <div className="flex justify-between pt-6">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setStep(3)}
-                  className="backdrop-blur-sm bg-white/60 border-gray-300 text-gray-700 hover:bg-white hover:border-gray-400 transition-all duration-300"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Previous
-                </Button>
-                <Button 
-                  onClick={() => setStep(5)} 
-                  disabled={!canProceedToStep5}
-                  className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold px-6 py-2 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                >
-                  Next Step
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
+              
+              <div className="flex gap-2">
+                {profile.is_verified && (
+                  <Badge variant="default" className="bg-green-100 text-green-800">
+                    <CheckCircle className="h-3 w-3 mr-1" />
+                    Verified
+                  </Badge>
+                )}
+                {profile.is_paid && (
+                  <Badge variant="default" className="bg-blue-100 text-blue-800">
+                    <CreditCard className="h-3 w-3 mr-1" />
+                    Premium
+                  </Badge>
+                )}
               </div>
             </div>
           </div>
-        )}
+        </div>
+      </div>
 
-        {/* Step 5: Payment Information */}
-        {step === 5 && (
-          <div className="backdrop-blur-xl bg-white/80 border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
-            <div className="p-6 border-b border-gray-200">
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-blue-600 bg-clip-text text-transparent flex items-center gap-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-purple-400 rounded-lg flex items-center justify-center">
-                  <CreditCard className="w-5 h-5 text-white" />
-                </div>
-                Payment Information
-              </h2>
-              <p className="text-gray-600 mt-2">
-                Choose your preferred payment method to complete your profile
-              </p>
+      {/* Content */}
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <Tabs defaultValue="profile" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="profile" className="flex items-center gap-2">
+              <User className="h-4 w-4" />
+              Profile
+            </TabsTrigger>
+            <TabsTrigger value="account" className="flex items-center gap-2">
+              <Settings className="h-4 w-4" />
+              Account
+            </TabsTrigger>
+            <TabsTrigger value="billing" className="flex items-center gap-2">
+              <CreditCard className="h-4 w-4" />
+              Billing
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="profile">
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Complete Your Profile</CardTitle>
+                  <CardDescription>
+                    Help us find the best matches for you by providing detailed information about your preferences and interests.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {profile.profile_completion_percentage < 80 && (
+                    <Alert className="mb-6">
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertDescription>
+                        Your profile is {profile.profile_completion_percentage}% complete. 
+                        Complete your profile to get better matches and access all features.
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                  
+                  <ComprehensiveProfileForm
+                    initialData={convertProfileToFormData(profile)}
+                    onSubmit={handleProfileSubmit}
+                    isLoading={isSaving}
+                  />
+                  
+                  {/* Profile Completion Success Message */}
+                  {profile.profile_completion_percentage >= 80 && (
+                    <div className="mt-6 p-6 bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg">
+                      <div className="flex items-center gap-3 mb-4">
+                        <CheckCircle className="h-6 w-6 text-green-600" />
+                        <h3 className="text-lg font-semibold text-green-800">Profile Complete!</h3>
+                      </div>
+                      <p className="text-green-700 mb-4">
+                        Congratulations! Your profile is now {profile.profile_completion_percentage}% complete. 
+                        You're ready to start receiving weekly matches.
+                      </p>
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <Link href="/dashboard">
+                          <Button className="w-full sm:w-auto bg-green-600 hover:bg-green-700">
+                            Go to Dashboard
+                          </Button>
+                        </Link>
+                        {!profile.is_verified && (
+                          <Link href="/verify">
+                            <Button variant="outline" className="w-full sm:w-auto">
+                              Complete Verification
+                            </Button>
+                          </Link>
+                        )}
+                        {!profile.is_paid && (
+                          <Link href="/pricing">
+                            <Button variant="outline" className="w-full sm:w-auto">
+                              View Subscription Plans
+                            </Button>
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </div>
-            <div className="p-6 space-y-8">
-              <div className="space-y-4">
-                <Label className="text-gray-700 font-medium">Payment Method *</Label>
-                <RadioGroup value={paymentData.paymentMethod} onValueChange={(value) => setPaymentData(prev => ({ ...prev, paymentMethod: value as 'credit_card' | 'paypal' }))}>
-                  <div className="flex gap-6">
-                    <div className="flex items-center space-x-3">
-                      <RadioGroupItem value="credit_card" id="credit_card" className="border-gray-400 text-blue-500" />
-                      <Label htmlFor="credit_card" className="text-gray-700 cursor-pointer">Credit Card</Label>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <RadioGroupItem value="paypal" id="paypal" className="border-gray-400 text-blue-500" />
-                      <Label htmlFor="paypal" className="text-gray-700 cursor-pointer">PayPal</Label>
-                    </div>
-                  </div>
-                </RadioGroup>
-              </div>
+          </TabsContent>
 
-              {paymentData.paymentMethod === 'credit_card' && (
-                <div className="space-y-6 p-6 backdrop-blur-sm bg-gray-50 border border-gray-200 rounded-xl">
-                  <div className="space-y-3">
-                    <Label htmlFor="cardNumber" className="text-gray-700 font-medium">Card Number *</Label>
-                    <Input
-                      id="cardNumber"
-                      value={paymentData.cardNumber}
-                      onChange={(e) => setPaymentData(prev => ({ ...prev, cardNumber: e.target.value }))}
-                      placeholder="1234 5678 9012 3456"
-                      maxLength={19}
-                      className="backdrop-blur-sm bg-white/60 border-gray-300 text-gray-800 placeholder:text-gray-500 focus:bg-white focus:border-blue-400 transition-all duration-300"
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-3">
-                      <Label htmlFor="expiryDate" className="text-gray-700 font-medium">Expiry Date *</Label>
-                      <Input
-                        id="expiryDate"
-                        value={paymentData.expiryDate}
-                        onChange={(e) => setPaymentData(prev => ({ ...prev, expiryDate: e.target.value }))}
-                        placeholder="MM/YY"
-                        maxLength={5}
-                        className="backdrop-blur-sm bg-white/60 border-gray-300 text-gray-800 placeholder:text-gray-500 focus:bg-white focus:border-blue-400 transition-all duration-300"
-                      />
+          <TabsContent value="account">
+            <Card>
+              <CardHeader>
+                <CardTitle>Account Settings</CardTitle>
+                <CardDescription>
+                  Manage your account preferences and security settings.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-medium mb-4">Account Information</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-sm font-medium text-gray-700">Email Address</Label>
+                      <p className="text-sm text-gray-900">{profile.email}</p>
                     </div>
-                    <div className="space-y-3">
-                      <Label htmlFor="cvv" className="text-gray-700 font-medium">CVV *</Label>
-                      <Input
-                        id="cvv"
-                        value={paymentData.cvv}
-                        onChange={(e) => setPaymentData(prev => ({ ...prev, cvv: e.target.value }))}
-                        placeholder="123"
-                        maxLength={3}
-                        className="backdrop-blur-sm bg-white/60 border-gray-300 text-gray-800 placeholder:text-gray-500 focus:bg-white focus:border-blue-400 transition-all duration-300"
-                      />
+                    <div>
+                      <Label className="text-sm font-medium text-gray-700">Member Since</Label>
+                      <p className="text-sm text-gray-900">
+                        {new Date(profile.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium text-gray-700">Account Status</Label>
+                      <div className="flex gap-2 mt-1">
+                        <Badge variant={profile.is_verified ? "default" : "secondary"}>
+                          {profile.is_verified ? "Verified" : "Unverified"}
+                        </Badge>
+                        <Badge variant={profile.is_paid ? "default" : "outline"}>
+                          {profile.is_paid ? "Premium" : "Free"}
+                        </Badge>
+                      </div>
                     </div>
                   </div>
                 </div>
-              )}
 
-              {paymentData.paymentMethod === 'paypal' && (
-                <div className="space-y-6 p-6 backdrop-blur-sm bg-gray-50 border border-gray-200 rounded-xl">
-                  <div className="space-y-3">
-                    <Label htmlFor="paypalEmail" className="text-gray-700 font-medium">PayPal Email *</Label>
-                    <Input
-                      id="paypalEmail"
-                      type="email"
-                      value={paymentData.paypalEmail}
-                      onChange={(e) => setPaymentData(prev => ({ ...prev, paypalEmail: e.target.value }))}
-                      placeholder="your.email@example.com"
-                      className="backdrop-blur-sm bg-white/60 border-gray-300 text-gray-800 placeholder:text-gray-500 focus:bg-white focus:border-blue-400 transition-all duration-300"
-                    />
+                <Separator />
+
+                <div>
+                  <h3 className="text-lg font-medium mb-4">Privacy & Safety</h3>
+                  <div className="space-y-4">
+                    <Button variant="outline" className="w-full justify-start">
+                      Manage Privacy Settings
+                    </Button>
+                    <Button variant="outline" className="w-full justify-start">
+                      Block List
+                    </Button>
+                    <Button variant="outline" className="w-full justify-start">
+                      Report an Issue
+                    </Button>
                   </div>
                 </div>
-              )}
 
-              {/* Summary */}
-              <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
-              <div className="space-y-6">
-                <h3 className="font-semibold text-xl bg-gradient-to-r from-gray-800 to-blue-600 bg-clip-text text-transparent">Profile Summary</h3>
-                <div className="grid md:grid-cols-2 gap-4 text-sm backdrop-blur-sm bg-gray-50 rounded-xl p-4">
-                  <div className="text-gray-700">
-                    <strong className="text-gray-900">Name:</strong> {profileData.firstName} {profileData.lastName}
-                  </div>
-                  <div className="text-gray-700">
-                    <strong className="text-gray-900">Specialty:</strong> {profileData.specialty}
-                  </div>
-                  <div className="text-gray-700">
-                    <strong className="text-gray-900">City:</strong> {profileData.city}
-                  </div>
-                  <div className="text-gray-700">
-                    <strong className="text-gray-900">Gender:</strong> {profileData.gender}
-                  </div>
-                  <div className="text-gray-700">
-                    <strong className="text-gray-900">Gender Preference:</strong> {profileData.genderPreference}
-                  </div>
-                  <div className="text-gray-700">
-                    <strong className="text-gray-900">Interests:</strong> {profileData.interests.length} selected
-                  </div>
-                  <div className="text-gray-700">
-                    <strong className="text-gray-900">Availability:</strong> {profileData.availabilitySlots.length} time slots
-                  </div>
-                  <div className="text-gray-700">
-                    <strong className="text-gray-900">Payment Method:</strong> {paymentData.paymentMethod === 'credit_card' ? 'Credit Card' : 'PayPal'}
+                <Separator />
+
+                <div>
+                  <h3 className="text-lg font-medium mb-4 text-red-600">Danger Zone</h3>
+                  <div className="space-y-4">
+                    <Button variant="outline" className="w-full justify-start text-red-600 border-red-200 hover:bg-red-50">
+                      Deactivate Account
+                    </Button>
+                    <Button variant="outline" className="w-full justify-start text-red-600 border-red-200 hover:bg-red-50">
+                      Delete Account
+                    </Button>
                   </div>
                 </div>
-              </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-              {error && (
-                <div className="backdrop-blur-sm bg-red-50 border border-red-200 rounded-xl p-4">
-                  <div className="flex items-center gap-3">
-                    <AlertCircle className="h-5 w-5 text-red-500" />
-                    <p className="text-red-700">{error}</p>
+          <TabsContent value="billing">
+            <Card>
+              <CardHeader>
+                <CardTitle>Billing & Subscription</CardTitle>
+                <CardDescription>
+                  Manage your subscription and billing information.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-medium mb-4">Current Plan</h3>
+                  <div className="border rounded-lg p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-medium">
+                          {profile.is_paid ? "Premium Plan" : "Free Plan"}
+                        </h4>
+                        <p className="text-sm text-gray-600">
+                          {profile.is_paid 
+                            ? "Access to all features and unlimited matches"
+                            : "Limited features and matches"
+                          }
+                        </p>
+                      </div>
+                      <Badge variant={profile.is_paid ? "default" : "outline"}>
+                        {profile.is_paid ? "Active" : "Free"}
+                      </Badge>
+                    </div>
                   </div>
                 </div>
-              )}
 
-              <div className="flex justify-between pt-6">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setStep(4)}
-                  className="backdrop-blur-sm bg-white/60 border-gray-300 text-gray-700 hover:bg-white hover:border-gray-400 transition-all duration-300"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Previous
-                </Button>
-                <Button 
-                  onClick={handleSaveProfile} 
-                  disabled={!validatePayment() || isSaving}
-                  className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-semibold px-6 py-2 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                >
-                  {isSaving ? "Saving..." : "Complete Profile"}
-                  <CheckCircle className="w-4 h-4 ml-2" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
+                {!profile.is_paid && (
+                  <div>
+                    <h3 className="text-lg font-medium mb-4">Upgrade to Premium</h3>
+                    <div className="border rounded-lg p-4 bg-blue-50">
+                      <h4 className="font-medium text-blue-900">Premium Benefits</h4>
+                      <ul className="text-sm text-blue-800 mt-2 space-y-1">
+                        <li>• Unlimited matches per week</li>
+                        <li>• Advanced filtering options</li>
+                        <li>• Priority customer support</li>
+                        <li>• Exclusive events and features</li>
+                      </ul>
+                      <Button className="mt-4 w-full">
+                        Upgrade to Premium
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {profile.is_paid && (
+                  <div>
+                    <h3 className="text-lg font-medium mb-4">Billing History</h3>
+                    <div className="text-center py-8 text-gray-500">
+                      <CreditCard className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                      <p>No billing history available</p>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   )
