@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Filter } from "lucide-react"
 import Link from "next/link"
+import { Notification } from "@/lib/types"
 
 // Custom hooks
 import { useAuth } from "@/hooks/use-auth"
@@ -24,7 +25,7 @@ export default function DashboardPage() {
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState("")
   const [activeTab, setActiveTab] = useState("overview")
-  const [notifications, setNotifications] = useState([
+  const [notifications, setNotifications] = useState<Notification[]>([
     { id: 1, type: "match", message: "New match available in Cardiology group", time: "2 hours ago", unread: true },
     { id: 2, type: "message", message: "Dr. Smith sent a message in Surgery group", time: "4 hours ago", unread: true },
     { id: 3, type: "system", message: "Weekly matching completed successfully", time: "1 day ago", unread: false }
@@ -40,7 +41,10 @@ export default function DashboardPage() {
     isLoading: dashboardLoading, 
     error: dashboardError, 
     refreshData, 
-    joinGroup 
+    joinGroup,
+    getInitials,
+    getLastMessage,
+    getLastMessageTime
   } = useDashboard(user?.id || null)
 
   // Redirect if not authenticated
@@ -132,7 +136,7 @@ export default function DashboardPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center">
         <EmptyState
-          icon={Filter}
+          icon={<Filter className="w-8 h-8 text-gray-400" />}
           title="Profile Not Found"
           description="We couldn't load your profile data. Please try again or contact support."
           action={
@@ -158,7 +162,7 @@ export default function DashboardPage() {
 
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Welcome Section */}
-        <WelcomeSection firstName={profile.first_name} stats={stats} />
+          <WelcomeSection profile={profile} stats={stats} />
 
         {/* Stats Grid */}
         <StatsGrid profile={profile} stats={stats} />
@@ -201,7 +205,7 @@ export default function DashboardPage() {
             {matches.length === 0 ? (
               <div className="space-y-6">
                 <EmptyState
-                  icon={Filter}
+                  icon={<Filter className="w-8 h-8 text-gray-400" />}
                   title="Ready to Connect?"
                   description={
                     !profile.is_verified
@@ -239,7 +243,10 @@ export default function DashboardPage() {
                   <MatchCard 
                     key={match.id} 
                     match={match}
-                    onViewDetails={(matchId) => console.log('View details for:', matchId)}
+                    getInitials={getInitials}
+                    getLastMessage={getLastMessage}
+                    getLastMessageTime={getLastMessageTime}
+                    onViewDetails={(matchId: string) => console.log('View details for:', matchId)}
                   />
                 ))}
               </div>
@@ -257,7 +264,7 @@ export default function DashboardPage() {
               </div>
               {matches.length === 0 ? (
                 <EmptyState
-                  icon={Filter}
+                  icon={<Filter className="w-8 h-8 text-gray-400" />}
                   title="No Groups Yet"
                   description="You haven't joined any groups yet. Check out available groups to join!"
                   action={
@@ -272,7 +279,10 @@ export default function DashboardPage() {
                     <MatchCard 
                       key={match.id} 
                       match={match}
-                      onViewDetails={(matchId) => console.log('View details for:', matchId)}
+                      getInitials={getInitials}
+                      getLastMessage={getLastMessage}
+                      getLastMessageTime={getLastMessageTime}
+                      onViewDetails={(matchId: string) => console.log('View details for:', matchId)}
                     />
                   ))}
                 </div>
@@ -291,7 +301,7 @@ export default function DashboardPage() {
               </div>
               {availableGroups.length === 0 ? (
                 <EmptyState
-                  icon={Filter}
+                  icon={<Filter className="w-8 h-8 text-gray-400" />}
                   title="No Available Groups"
                   description="All existing groups are currently full or you're already a member of all groups."
                 />

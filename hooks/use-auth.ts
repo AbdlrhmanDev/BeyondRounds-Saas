@@ -8,6 +8,7 @@ export function useAuth(): UseAuthReturn {
   const [user, setUser] = useState<User | null>(null)
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const router = useRouter()
   const supabase = createClient()
 
@@ -18,6 +19,7 @@ export function useAuth(): UseAuthReturn {
         const { data: { user }, error: userError } = await supabase.auth.getUser()
         
         if (userError || !user) {
+          setError(userError?.message || 'Authentication failed')
           router.push('/auth/login')
           return
         }
@@ -33,11 +35,13 @@ export function useAuth(): UseAuthReturn {
 
         if (profileError) {
           console.error('Error loading profile:', profileError)
+          setError(profileError.message)
         } else {
           setProfile(profileData)
         }
       } catch (error) {
         console.error('Error initializing auth:', error)
+        setError(error instanceof Error ? error.message : 'An unexpected error occurred')
       } finally {
         setLoading(false)
       }
@@ -72,6 +76,7 @@ export function useAuth(): UseAuthReturn {
     user,
     profile,
     loading,
+    error,
     signOut,
     isProfileComplete: isProfileComplete(profile)
   }

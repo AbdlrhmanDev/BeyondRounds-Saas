@@ -14,6 +14,7 @@ export interface UserProfile {
   profile_image_url?: string
   created_at?: string
   updated_at?: string
+  profile_completion_percentage?: number
 }
 
 export interface Match {
@@ -112,6 +113,7 @@ export interface MatchCardProps {
   getInitials: (firstName: string, lastName: string) => string
   getLastMessage: (match: Match) => string
   getLastMessageTime: (match: Match) => string
+  onViewDetails?: (matchId: string) => void
 }
 
 export interface HeroSectionProps {
@@ -150,6 +152,7 @@ export interface UseAuthReturn {
   user: any | null // Supabase User type
   profile: UserProfile | null
   loading: boolean
+  error: string | null
   signOut: () => Promise<void>
   isProfileComplete: boolean
 }
@@ -160,6 +163,10 @@ export interface UseDashboardReturn {
   notifications: Notification[]
   isJoining: string | null
   loading: boolean
+  isLoading: boolean
+  error: string | null
+  profile: UserProfile | null
+  stats: DashboardStats
   joinGroup: (groupId: string) => Promise<void>
   markNotificationAsRead: (id: number) => void
   getWeeklyStats: () => DashboardStats
@@ -167,6 +174,7 @@ export interface UseDashboardReturn {
   getLastMessageTime: (match: Match) => string
   getInitials: (firstName: string, lastName: string) => string
   loadDashboardData: () => Promise<void>
+  refreshData: () => Promise<void>
 }
 
 export interface UseLandingAuthReturn {

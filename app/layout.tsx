@@ -6,6 +6,8 @@ import '../styles/globals.css'
 import Footer from '@/components/footer'
 import ModernNav from '@/components/modern-nav'
 import { ThemeProvider } from '@/components/theme-provider'
+import { QueryProvider } from '@/lib/providers/query-provider'
+import { ErrorBoundary } from '@/components/common/error-boundary'
 export const metadata: Metadata = {
   title: "beyondrounds",
   description: 'where doctors become friends',
@@ -20,12 +22,16 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          <ModernNav />
-          {children}
-          <Analytics />
-          <Footer />
-        </ThemeProvider>
+        <ErrorBoundary>
+          <QueryProvider>
+            <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+              <ModernNav />
+              {children}
+              <Analytics />
+              <Footer />
+            </ThemeProvider>
+          </QueryProvider>
+        </ErrorBoundary>
       </body>
     </html>
   )
