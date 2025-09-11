@@ -1,19 +1,20 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { CheckCircle, Users, MessageCircle, Shield, Heart, Star, Zap, Globe } from "lucide-react"
-import Link from "next/link"
-
-// Custom hooks
-import { useLandingAuth } from "@/hooks/use-landing-auth"
-
-// Components
-import { HeroSection, HowItWorksStep, FeatureCard, TestimonialCard } from "@/components/landing/landing-components"
+import { HeroSection, FeatureCard, TestimonialCard } from '@/components/landing/landing-components'
+import { useAuth } from '@/hooks/use-auth'
+import { 
+  Shield, 
+  Users, 
+  MessageCircle, 
+  CheckCircle, 
+  Star, 
+  Zap, 
+  Globe, 
+  Heart
+} from 'lucide-react'
 
 export default function LandingPage() {
-  const { user, loading } = useLandingAuth()
+  const { user, loading } = useAuth()
 
   return (
     <div className="min-h-screen relative overflow-hidden">
@@ -29,11 +30,10 @@ export default function LandingPage() {
 
       {/* Glass morphism overlay */}
       <div className="min-h-screen bg-white/5 backdrop-blur-[1px] supports-backdrop-blur:bg-white/5 supports-no-backdrop-blur:bg-white/90">
-
         {/* Hero Section */}
         <HeroSection user={user} />
 
-        {/* Enhanced How It Works */}
+        {/* How It Works Section */}
         <section className="py-24 px-4 relative overflow-hidden">
           {/* Background decorative elements */}
           <div className="absolute inset-0 pointer-events-none">
@@ -58,52 +58,35 @@ export default function LandingPage() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-10">
-              <HowItWorksStep
-                stepNumber={1}
-                icon={<Shield className="w-10 h-10 text-white group-hover:animate-pulse" />}
+              <FeatureCard
+                icon={Shield}
                 title="Get Verified"
                 description="Upload your medical license and ID for quick verification. We ensure all members are legitimate healthcare professionals."
-                features={[
-                  "Medical license verification",
-                  "Photo ID confirmation", 
-                  "Usually approved within 24 hours"
-                ]}
-                gradientFrom="violet-500"
-                gradientTo="blue-600"
+                step={1}
+                gradientFrom="from-violet-500/15"
+                gradientTo="to-blue-500/15"
               />
-
-              <HowItWorksStep
-                stepNumber={2}
-                icon={<Users className="w-10 h-10 text-white group-hover:animate-pulse" />}
+              <FeatureCard
+                icon={Users}
                 title="Smart Matching"
                 description="Our algorithm matches you with 2-3 doctors based on specialty, interests, location, and availability every Thursday."
-                features={[
-                  "AI-powered compatibility",
-                  "Location-based matching",
-                  "Weekly fresh connections"
-                ]}
-                gradientFrom="blue-500"
-                gradientTo="cyan-600"
+                step={2}
+                gradientFrom="from-blue-500/15"
+                gradientTo="to-cyan-500/15"
               />
-
-              <HowItWorksStep
-                stepNumber={3}
-                icon={<MessageCircle className="w-10 h-10 text-white group-hover:animate-pulse" />}
+              <FeatureCard
+                icon={MessageCircle}
                 title="Connect & Meet"
                 description="Chat with your matches, plan meetups, and build lasting friendships with fellow medical professionals."
-                features={[
-                  "Private group chats",
-                  "Plan meetups together",
-                  "Build lasting friendships"
-                ]}
-                gradientFrom="cyan-500"
-                gradientTo="purple-600"
+                step={3}
+                gradientFrom="from-cyan-500/15"
+                gradientTo="to-purple-500/15"
               />
             </div>
           </div>
         </section>
 
-        {/* Enhanced Features */}
+        {/* Features Section */}
         <section id="features" className="py-24 px-4 relative overflow-hidden">
           {/* Background decorative elements */}
           <div className="absolute inset-0 pointer-events-none">
@@ -127,87 +110,56 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-2 gap-12">
               <div className="space-y-10">
                 <FeatureCard
-                  icon={<CheckCircle className="w-8 h-8 text-white group-hover:animate-pulse" />}
+                  icon={CheckCircle}
                   title="Verified Medical Professionals Only"
                   description="Connect with confidence knowing every member is a verified healthcare professional."
-                  gradientFrom="green-500"
-                  gradientTo="emerald-600"
+                  gradientFrom="from-green-500/10"
+                  gradientTo="to-emerald-500/10"
                 />
-
                 <FeatureCard
-                  icon={<Zap className="w-8 h-8 text-white group-hover:animate-pulse" />}
+                  icon={Zap}
                   title="AI-Powered Matching"
                   description="Smart algorithm considers specialty, interests, location, and schedule compatibility."
-                  gradientFrom="violet-500"
-                  gradientTo="purple-600"
+                  gradientFrom="from-violet-500/10"
+                  gradientTo="to-purple-500/10"
                 />
-
                 <FeatureCard
-                  icon={<MessageCircle className="w-8 h-8 text-white group-hover:animate-pulse" />}
+                  icon={MessageCircle}
                   title="Private Group Chats"
                   description="Secure, private conversations with your matches facilitated by our AI assistant."
-                  gradientFrom="blue-500"
-                  gradientTo="cyan-600"
+                  gradientFrom="from-blue-500/10"
+                  gradientTo="to-cyan-500/10"
                 />
               </div>
 
               <div className="space-y-10">
                 <FeatureCard
-                  icon={<Star className="w-8 h-8 text-white group-hover:animate-pulse" />}
+                  icon={Star}
                   title="Weekly Fresh Matches"
                   description="New connections every Thursday, expanding your professional and social network."
-                  gradientFrom="orange-500"
-                  gradientTo="red-600"
+                  gradientFrom="from-orange-500/10"
+                  gradientTo="to-red-500/10"
                 />
-
                 <FeatureCard
-                  icon={<Globe className="w-8 h-8 text-white group-hover:animate-pulse" />}
+                  icon={Globe}
                   title="Local Focus"
                   description="Meet doctors in your city for real-world connections and friendships."
-                  gradientFrom="teal-500"
-                  gradientTo="cyan-600"
+                  gradientFrom="from-teal-500/10"
+                  gradientTo="to-cyan-500/10"
                 />
-
                 <FeatureCard
-                  icon={<Shield className="w-8 h-8 text-white group-hover:animate-pulse" />}
+                  icon={Shield}
                   title="30-Day Guarantee"
                   description="Not satisfied? Get your money back within 30 days, no questions asked."
-                  gradientFrom="emerald-500"
-                  gradientTo="green-600"
+                  gradientFrom="from-emerald-500/10"
+                  gradientTo="to-green-500/10"
                 />
               </div>
             </div>
           </div>
         </section>
 
-        {/* Enhanced Pricing Section */}
-        <section id="pricing" className="py-24 px-4 relative overflow-hidden">
-          {/* Background decorative elements */}
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-20 left-20 w-64 h-64 bg-gradient-to-r from-purple-400/10 to-pink-500/10 rounded-full blur-3xl animate-float"></div>
-            <div className="absolute bottom-20 right-20 w-72 h-72 bg-gradient-to-r from-blue-400/10 to-cyan-500/10 rounded-full blur-3xl animate-float-delayed"></div>
-          </div>
-
-          <div className="container mx-auto max-w-6xl relative z-10">
-            <div className="text-center">
-              <h2 className="text-4xl lg:text-6xl font-bold mb-8">
-                <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 bg-clip-text text-transparent animate-gradient-text drop-shadow-lg">
-                  Simple, Transparent Pricing
-                </span>
-              </h2>
-              <p className="text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-12">
-                Choose the plan that works best for your networking goals.
-              </p>
-              <Link href="/pricing">
-                <Button size="lg" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-12 py-6 text-xl font-bold shadow-3xl shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-500 hover:scale-110">
-                  View Pricing Plans
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* Enhanced Testimonials */}
+        {/* Testimonials Section */}
         <section className="py-24 px-4 relative overflow-hidden">
           {/* Background decorative elements */}
           <div className="absolute inset-0 pointer-events-none">
@@ -230,36 +182,37 @@ export default function LandingPage() {
 
             <div className="grid md:grid-cols-3 gap-10">
               <TestimonialCard
-                quote="BeyondRounds helped me find my closest friends in the medical field. The matching algorithm is incredible!"
-                author="Dr. Sarah Chen"
-                role="Cardiologist, San Francisco"
+                name="Dr. Sarah Chen"
+                role="Cardiologist"
+                location="San Francisco"
+                content="BeyondRounds helped me find my closest friends in the medical field. The matching algorithm is incredible!"
                 initials="SC"
-                gradientFrom="green-500"
-                gradientTo="emerald-600"
+                gradientFrom="from-green-500/15"
+                gradientTo="to-emerald-500/15"
               />
-
               <TestimonialCard
-                quote="Finally, a platform that understands the unique challenges doctors face. Made amazing connections here."
-                author="Dr. Michael Johnson"
-                role="Emergency Medicine, Chicago"
+                name="Dr. Michael Johnson"
+                role="Emergency Medicine"
+                location="Chicago"
+                content="Finally, a platform that understands the unique challenges doctors face. Made amazing connections here."
                 initials="MJ"
-                gradientFrom="blue-500"
-                gradientTo="cyan-600"
+                gradientFrom="from-blue-500/15"
+                gradientTo="to-cyan-500/15"
               />
-
               <TestimonialCard
-                quote="The verification process gives me confidence, and the matches have been spot-on. Highly recommended!"
-                author="Dr. Aisha Patel"
-                role="Pediatrics, Austin"
+                name="Dr. Aisha Patel"
+                role="Pediatrics"
+                location="Austin"
+                content="The verification process gives me confidence, and the matches have been spot-on. Highly recommended!"
                 initials="AP"
-                gradientFrom="purple-500"
-                gradientTo="pink-600"
+                gradientFrom="from-purple-500/15"
+                gradientTo="to-pink-500/15"
               />
             </div>
           </div>
         </section>
 
-        {/* Enhanced CTA Section */}
+        {/* CTA Section */}
         <section className="py-32 px-4 relative overflow-hidden">
           {/* Enhanced background */}
           <div className="absolute inset-0 bg-gradient-to-r from-violet-600/25 via-blue-600/25 to-cyan-500/25"></div>
@@ -292,28 +245,25 @@ export default function LandingPage() {
                 Join hundreds of doctors who have found their professional community through BeyondRounds.
               </p>
               <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                <Link href={user ? "/dashboard" : "/auth/sign-up"}>
-                  <Button size="lg" className="relative overflow-hidden bg-white text-violet-700 hover:bg-gray-50 px-10 py-5 text-lg font-semibold shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-110 group border border-white/20">
+                <a href={user ? "/dashboard" : "/auth/sign-up"}>
+                  <button className="relative overflow-hidden bg-white text-violet-700 hover:bg-gray-50 px-10 py-5 text-lg font-semibold shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-110 group border border-white/20 rounded-2xl">
                     <span className="relative z-10">{user ? "Go to Dashboard" : "Get Started Today"}</span>
                     <div className="absolute inset-0 bg-gradient-to-r from-violet-600/0 via-violet-600/15 to-violet-600/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out"></div>
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
-                  </Button>
-                </Link>
-                <Link href="/about">
-                  <Button size="lg" variant="outline" className="px-10 py-5 text-lg font-semibold border-2 border-white/40 text-white hover:bg-white/15 hover:border-white/60 transition-all duration-500 hover:scale-105 backdrop-blur-xl group">
+                  </button>
+                </a>
+                <a href="/about">
+                  <button className="px-10 py-5 text-lg font-semibold border-2 border-white/40 text-white hover:bg-white/15 hover:border-white/60 transition-all duration-500 hover:scale-105 backdrop-blur-xl group rounded-2xl">
                     <span className="flex items-center gap-3">
                       Learn More
                       <Globe className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
                     </span>
-                  </Button>
-                </Link>
+                  </button>
+                </a>
               </div>
             </div>
           </div>
         </section>
-
-        {/* Enhanced Footer */}
-    
       </div>
     </div>
   )
