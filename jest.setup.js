@@ -17,38 +17,54 @@ jest.mock('next/navigation', () => ({
 }))
 
 // Mock Supabase client
-jest.mock('@/lib/supabase/client', () => ({
-  createClient: () => ({
-    auth: {
-      getUser: jest.fn(),
-      signOut: jest.fn(),
-      onAuthStateChange: jest.fn(() => ({ data: { subscription: { unsubscribe: jest.fn() } } })),
-    },
-    from: jest.fn(() => ({
-      select: jest.fn(() => ({
-        eq: jest.fn(() => ({
-          order: jest.fn(() => ({
-            single: jest.fn(() => Promise.resolve({ data: null, error: null })),
-          })),
-        })),
-      })),
-      insert: jest.fn(() => ({
-        select: jest.fn(() => Promise.resolve({ data: null, error: null })),
-      })),
-      update: jest.fn(() => ({
-        eq: jest.fn(() => ({
-          select: jest.fn(() => ({
-            single: jest.fn(() => Promise.resolve({ data: null, error: null })),
-          })),
-        })),
-      })),
+const mockSupabaseClient = {
+  auth: {
+    getUser: jest.fn(() => Promise.resolve({ 
+      data: { user: null }, 
+      error: null 
     })),
-  }),
+    getSession: jest.fn(() => Promise.resolve({ 
+      data: { session: null }, 
+      error: null 
+    })),
+    signInWithPassword: jest.fn(),
+    signUp: jest.fn(),
+    signOut: jest.fn(),
+    resetPasswordForEmail: jest.fn(),
+    updateUser: jest.fn(),
+    signInWithOAuth: jest.fn(),
+    onAuthStateChange: jest.fn(() => ({ 
+      data: { subscription: { unsubscribe: jest.fn() } } 
+    })),
+  },
+  from: jest.fn(() => ({
+    select: jest.fn().mockReturnThis(),
+    insert: jest.fn().mockReturnThis(),
+    update: jest.fn().mockReturnThis(),
+    delete: jest.fn().mockReturnThis(),
+    eq: jest.fn().mockReturnThis(),
+    order: jest.fn().mockReturnThis(),
+    limit: jest.fn().mockReturnThis(),
+    single: jest.fn(() => Promise.resolve({ data: null, error: null })),
+  })),
+  rpc: jest.fn(),
+}
+
+jest.mock('@/lib/supabase/client', () => ({
+  createClient: () => mockSupabaseClient,
+}))
+
+jest.mock('@/lib/database/supabase-browser', () => ({
+  createClient: () => mockSupabaseClient,
 }))
 
 // Mock environment variables
-process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test.supabase.co'
-process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'test-key'
+process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test-project.supabase.co'
+process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlc3QtcHJvamVjdCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNjQwOTk1MjAwLCJleHAiOjE5NTYzNTUyMDB9.test-signature'
+process.env.SUPABASE_SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlc3QtcHJvamVjdCIsInJvbGUiOiJzZXJ2aWNlX3JvbGUiLCJpYXQiOjE2NDA5OTUyMDAsImV4cCI6MTk1NjM1NTIwMH0.test-service-signature'
+process.env.NODE_ENV = 'test'
+process.env.NEXT_PUBLIC_APP_URL = 'http://localhost:3000'
+process.env.CRON_SECRET = 'test-cron-secret-key-for-testing-only'
 
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {

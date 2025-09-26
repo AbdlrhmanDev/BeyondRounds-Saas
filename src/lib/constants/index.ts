@@ -1,0 +1,108 @@
+/**
+ * Constants Index
+ * Centralized export of all application constants
+ */
+
+// Route Constants
+export * from './routes'
+
+// API Endpoints
+export * from './api'
+
+// Messages (Success, Error, Validation)
+export * from './messages'
+
+// Application Configuration
+export * from './config'
+
+// Re-export commonly used constants for convenience
+export {
+  // Routes
+  PUBLIC_ROUTES,
+  AUTH_ROUTES,
+  PROTECTED_ROUTES,
+  ADMIN_ROUTES,
+  API_ROUTES,
+  DYNAMIC_ROUTES,
+  
+  // API
+  AUTH_ENDPOINTS,
+  USER_ENDPOINTS,
+  PROFILE_ENDPOINTS,
+  MATCHING_ENDPOINTS,
+  MESSAGING_ENDPOINTS,
+  NOTIFICATION_ENDPOINTS,
+  PAYMENT_ENDPOINTS,
+  VERIFICATION_ENDPOINTS,
+  ADMIN_ENDPOINTS,
+  
+  // Messages
+  SUCCESS_MESSAGES,
+  ERROR_MESSAGES,
+  VALIDATION_MESSAGES,
+  WARNING_MESSAGES,
+  INFO_MESSAGES,
+  
+  // Configuration
+  APP_CONFIG,
+  AUTH_CONFIG,
+  UPLOAD_CONFIG,
+  PAYMENT_CONFIG,
+  MATCHING_CONFIG,
+  NOTIFICATION_CONFIG,
+  FEATURE_FLAGS,
+  UI_CONFIG,
+} from './routes'
+
+export {
+  AUTH_ENDPOINTS,
+  USER_ENDPOINTS,
+  PROFILE_ENDPOINTS,
+  MATCHING_ENDPOINTS,
+  MESSAGING_ENDPOINTS,
+  NOTIFICATION_ENDPOINTS,
+  PAYMENT_ENDPOINTS,
+  VERIFICATION_ENDPOINTS,
+  ADMIN_ENDPOINTS,
+  API_STATUS,
+  API_ERROR_CODES,
+  API_TIMEOUTS,
+  PAGINATION,
+} from './api'
+
+export {
+  SUCCESS_MESSAGES,
+  ERROR_MESSAGES,
+  VALIDATION_MESSAGES,
+  WARNING_MESSAGES,
+  INFO_MESSAGES,
+  MESSAGE_TYPES,
+  MESSAGE_CATEGORIES,
+  getMessage,
+  getValidationMessage,
+} from './messages'
+
+export {
+  ENV,
+  APP_CONFIG,
+  DATABASE_CONFIG,
+  AUTH_CONFIG,
+  UPLOAD_CONFIG,
+  EMAIL_CONFIG,
+  PAYMENT_CONFIG,
+  MATCHING_CONFIG,
+  NOTIFICATION_CONFIG,
+  RATE_LIMIT_CONFIG,
+  CACHE_CONFIG,
+  SECURITY_CONFIG,
+  LOGGING_CONFIG,
+  FEATURE_FLAGS,
+  UI_CONFIG,
+  API_CONFIG,
+  WEBSOCKET_CONFIG,
+  DEV_CONFIG,
+  getConfig,
+  isFeatureEnabled,
+  getUploadLimit,
+  getSubscriptionPlan,
+} from './config'
